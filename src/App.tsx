@@ -88,11 +88,11 @@ function App() {
           />
         ) : (
           <textarea
-            className="markdown-input"
+            className="markdown-input monospace-font"
             value={userCss}
             onChange={e => setUserCss(e.target.value)}
             placeholder="여기에 CSS를 입력하세요..."
-            style={{ fontFamily: "monospace", minHeight: 200 }}
+            style={{ minHeight: 200 }}
           />
         )}
       </section>
@@ -121,7 +121,7 @@ function App() {
         ) : (
           <textarea
             className="html-output"
-            style={{ fontFamily: "monospace", whiteSpace: "pre", minHeight: 300 }}
+            style={{ whiteSpace: "pre", minHeight: 300 }}
             value={bloggerHtml}
             readOnly
           />
