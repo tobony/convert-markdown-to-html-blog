@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { marked } from "marked";
 import "./App.css";
 import appCss from "./App.css?inline";
@@ -8,6 +8,29 @@ function App() {
   const [userCss, setUserCss] = useState("");
   const [leftTab, setLeftTab] = useState<'markdown' | 'css'>("markdown");
   const [tab, setTab] = useState<'result' | 'code'>("result");
+
+  // Load sample.md content when the component mounts
+  useEffect(() => {
+    const loadSampleMarkdown = async () => {
+      try {
+        // Use the fetch API to get the sample.md content
+        const response = await fetch('/sample.md');
+        if (response.ok) {
+          const content = await response.text();
+          setMarkdown(content);
+        } else {
+          console.error('Failed to load sample.md');
+        }
+      } catch (error) {
+        console.error('Error loading sample markdown:', error);
+      }
+    };
+
+    // Only load if markdown is empty (first run)
+    if (!markdown) {
+      loadSampleMarkdown();
+    }
+  }, []);
 
   const html = marked.parse(markdown);
   // 사용자 CSS도 함께 style에 포함
