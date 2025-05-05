@@ -169,6 +169,78 @@ main, .markdown-input, .html-output {
   box-sizing: border-box;
 }
 
+/* 마크다운 테이블 스타일링 */
+.html-output table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.html-output thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+}
+
+.html-output th,
+.html-output td {
+  padding: 12px 15px;
+  border: 1px solid #dddddd;
+}
+
+.html-output tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.html-output tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.html-output tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+/* 코드 블록 스타일링 */
+.html-output pre {
+  background-color: #f4f4f4;
+  border: 1px solid #ddd;
+  border-left: 3px solid #f36d33;
+  color: #666;
+  page-break-inside: avoid;
+  font-family: monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 1.6em;
+  max-width: 100%;
+  overflow: auto;
+  padding: 1em 1.5em;
+  display: block;
+  word-wrap: break-word;
+}
+
+.html-output code {
+  background-color: #f4f4f4;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+}
+
+/* 인용문 스타일링 */
+.html-output blockquote {
+  background: #f9f9f9;
+  border-left: 10px solid #ccc;
+  margin: 1.5em 10px;
+  padding: 0.5em 10px;
+  quotes: "\201C""\201D""\2018""\2019";
+}
+
+.html-output blockquote p {
+  display: inline;
+}
+
 .split-pane h2 {
   margin: 0 0 4px 0;
   font-size: 1.1rem;
@@ -289,5 +361,47 @@ main, .markdown-input, .html-output {
   .markdown-input:focus {
     border-color: #24c8db;
     box-shadow: 0 1px 4px rgba(36, 200, 219, 0.3);
+  }
+
+  .html-output pre {
+    background-color: #2a2a2a;
+    border-color: #444;
+    border-left-color: #f36d33;
+    color: #ccc;
+  }
+
+  .html-output code {
+    background-color: #2a2a2a;
+    color: #ccc;
+  }
+
+  .html-output blockquote {
+    background: #333;
+    border-left-color: #666;
+  }
+
+  .html-output table {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .html-output thead tr {
+    background-color: #005a48;
+  }
+
+  .html-output th,
+  .html-output td {
+    border-color: #444;
+  }
+
+  .html-output tbody tr {
+    border-bottom-color: #444;
+  }
+
+  .html-output tbody tr:nth-of-type(even) {
+    background-color: #3a3a3a;
+  }
+
+  .html-output tbody tr:last-of-type {
+    border-bottom-color: #005a48;
   }
 }

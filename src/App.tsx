@@ -1,7 +1,31 @@
 import { useState, useEffect } from "react";
 import { marked } from "marked";
+import { markedHighlight } from "marked-highlight";
+import hljs from "highlight.js";
+import "highlight.js/styles/github.css"; // 라이트 모드용 스타일
 import "./App.css";
 import appCss from "./App.css?inline";
+
+// marked 설정 초기화
+marked.use(
+  markedHighlight({
+    highlight: (code, lang) => {
+      if (lang && hljs.getLanguage(lang)) {
+        return hljs.highlight(code, { language: lang }).value;
+      }
+      return hljs.highlightAuto(code).value;
+    }
+  }),
+  {
+    gfm: true, // GitHub Flavored Markdown 활성화
+    breaks: true, // 줄바꿈 인식
+    pedantic: false,
+    smartLists: true,
+    smartypants: true,
+    mangle: false,
+    headerIds: false
+  }
+);
 
 function App() {
   const [markdown, setMarkdown] = useState("");
