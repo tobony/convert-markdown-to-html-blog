@@ -1,6 +1,14 @@
-# Tauri + React + Typescript
+# Convert markdown to html blog
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+This tool helps you convert Markdown files to HTML format suitable for Google Blogger. It provides a simple interface to transform your Markdown content into properly formatted HTML that can be directly published to your Blogger site.
+
+## Key Features
+
+- Convert Markdown to Blogger-compatible HTML
+- Preserve formatting and styling
+- Support for images, links, code blocks, and other Markdown elements
+- Easy-to-use interface with preview functionality
+- Built with Tauri, React, and TypeScript for cross-platform compatibility
 
 ## Recommended IDE Setup
 
