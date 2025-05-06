@@ -19,11 +19,8 @@ marked.use(
   {
     gfm: true, // GitHub Flavored Markdown 활성화
     breaks: true, // 줄바꿈 인식
-    pedantic: false,
-    smartLists: true,
-    smartypants: true,
-    mangle: false,
-    headerIds: false
+    pedantic: false
+    // headerIds, smartLists, smartypants, and mangle removed as they're not valid properties in MarkedExtension type
   }
 );
 
