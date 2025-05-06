@@ -29,4 +29,26 @@ export default defineConfig(async () => ({
       ignored: ["**/src-tauri/**"],
     },
   },
+  
+  // 3. 빌드 설정 및 청크 분리 전략
+  build: {
+    chunkSizeWarningLimit: 600, // 경고 표시 기준 상향 조정 (필요하다면)
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // 1. React 관련 라이브러리 분리
+          'vendor-react': ['react', 'react-dom'],
+          
+          // 2. 마크다운 처리 관련 라이브러리 분리
+          'vendor-markdown': ['marked', 'marked-highlight'],
+          
+          // 3. 코드 하이라이팅 라이브러리 분리
+          'vendor-highlight': ['highlight.js'],
+          
+          // 4. Tauri 관련 라이브러리 분리
+          'vendor-tauri': ['@tauri-apps/api', '@tauri-apps/plugin-opener']
+        }
+      }
+    }
+  }
 }));

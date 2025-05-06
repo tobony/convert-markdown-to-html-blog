@@ -1,7 +1,34 @@
 import { useState, useEffect } from "react";
 import { marked } from "marked";
 import { markedHighlight } from "marked-highlight";
-import hljs from "highlight.js";
+// highlight.js 최적화: 코어만 임포트하고 필요한 언어만 추가
+import hljs from "highlight.js/lib/core";
+// 일반적으로 많이 사용되는 언어만 임포트
+import javascript from "highlight.js/lib/languages/javascript";
+import typescript from "highlight.js/lib/languages/typescript";
+import css from "highlight.js/lib/languages/css";
+import html from "highlight.js/lib/languages/xml"; // HTML은 XML로 처리됨
+import markdown from "highlight.js/lib/languages/markdown";
+import json from "highlight.js/lib/languages/json";
+import bash from "highlight.js/lib/languages/bash";
+import python from "highlight.js/lib/languages/python";
+
+// 필요한 언어만 등록
+hljs.registerLanguage("javascript", javascript);
+hljs.registerLanguage("js", javascript); // javascript 별칭
+hljs.registerLanguage("typescript", typescript);
+hljs.registerLanguage("ts", typescript); // typescript 별칭
+hljs.registerLanguage("css", css);
+hljs.registerLanguage("html", html);
+hljs.registerLanguage("xml", html); // html은 xml로 등록됨
+hljs.registerLanguage("markdown", markdown);
+hljs.registerLanguage("md", markdown); // markdown 별칭
+hljs.registerLanguage("json", json);
+hljs.registerLanguage("bash", bash);
+hljs.registerLanguage("sh", bash); // bash 별칭
+hljs.registerLanguage("python", python);
+hljs.registerLanguage("py", python); // python 별칭
+
 import "highlight.js/styles/github.css"; // 라이트 모드용 스타일
 import "./App.css";
 import appCss from "./App.css?inline";
@@ -13,7 +40,9 @@ marked.use(
       if (lang && hljs.getLanguage(lang)) {
         return hljs.highlight(code, { language: lang }).value;
       }
-      return hljs.highlightAuto(code).value;
+      // 언어를 지정하지 않은 경우 등록된 언어 중에서 가장 적합한 것을 선택
+      // 자동 감지 기능 대신 등록된 언어만 사용
+      return hljs.highlightAuto(code, hljs.listLanguages()).value;
     }
   }),
   {
