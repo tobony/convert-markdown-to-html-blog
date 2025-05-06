@@ -97,7 +97,7 @@ button {
 
 .split-container {
   display: flex;
-  height: 90vh;
+  height: 98vh;
   width: 100%;
   background: transparent;
   padding: 0;
@@ -113,14 +113,15 @@ button {
   background: #fff;
   border-radius: 4px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-  margin: 0 2px;
-  padding: 6px;
+  margin: 0 0px;
+  padding: 0px 4px;
   box-sizing: border-box;
   border: 1px solid #ccc;
 }
 
 .left-pane {
   border-right: none;
+  margin: 0 10px 0 0;
 }
 
 .right-pane {
@@ -136,10 +137,10 @@ main, .markdown-input, .html-output, textarea {
   width: 100%;
   min-height: 0;
   resize: none;
-  font-size: 1.04rem;
-  padding: 8px 10px;
+  font-size: 1.0rem;
+  padding: 0px 0px;
   border: 1.5px solid #e3e7ef;
-  border-radius: 4px;
+  border-radius: 8px;
   background: #f8fafc;
   margin-top: 5px;
   box-shadow: 0 1px 3px 0 rgba(60, 80, 120, 0.05);
@@ -147,30 +148,15 @@ main, .markdown-input, .html-output, textarea {
   transition: border 0.2s, box-shadow 0.2s;
   box-sizing: border-box;
   line-height: 1.6;
+  overflow: auto; /* 스크롤바 추가 */
 }
 
-.markdown-input.monospace-font, textarea.html-output {
+.markdown-input.custom-css, textarea.html-output {
   font-family: 'D2Coding', Consolas, Monaco, 'Nanum Gothic Coding', 'Noto Sans Mono CJK KR', monospace;
-  font-size: 0.96rem;
+  font-size: 1.0rem;
   line-height: 1.5;
 }
 
-.html-output {
-  flex: 1;
-  width: 100%;
-  min-height: 0;
-  overflow: auto;
-  padding: 10px;
-  border: 1.5px solid #e3e7ef;
-  border-radius: 8px;
-  background: #f8fafc;
-  margin-top: 8px;
-  box-shadow: 0 1px 4px 0 rgba(60, 80, 120, 0.06);
-  outline: none;
-  transition: border 0.2s, box-shadow 0.2s;
-  font-size: 1.04rem;
-  box-sizing: border-box;
-}
 
 /* 마크다운 테이블 스타일링 */
 .html-output table {
@@ -287,19 +273,19 @@ main, .markdown-input, .html-output, textarea {
 .tab-bar {
   display: flex;
   border-bottom: 1.5px solid #e3e7ef;
-  margin: 0 0 8px 0;
+  margin: 0 0 5px 0;
   background: transparent;
 }
 .tab-btn {
   appearance: none;
   border: none;
   background: none;
-  padding: 8px 20px;
+  padding: 5px 10px;
   margin: 0;
   font-size: 1.05rem;
   font-weight: 500;
   color: #7a859a;
-  border-radius: 8px 8px 0 0;
+  border-radius: 5px 5px 0 0;
   border-bottom: 2px solid transparent;
   transition: color 0.2s, border-bottom 0.2s, background 0.2s;
   cursor: pointer;
@@ -328,7 +314,7 @@ main, .markdown-input, .html-output, textarea {
     margin: 0;
     border-radius: 0;
     box-shadow: none;
-    padding: 12px 8px;
+    padding: 8px 8px;
   }
   .left-pane {
     border-right: none;

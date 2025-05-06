@@ -28,7 +28,7 @@ function App() {
   const [markdown, setMarkdown] = useState("");
   const [userCss, setUserCss] = useState("");
   const [leftTab, setLeftTab] = useState<'markdown' | 'css'>("markdown");
-  const [tab, setTab] = useState<'result' | 'code'>("result");
+  const [tab, setTab] = useState<'html_output' | 'html_code'>("html_output");
 
   // Load sample.md content when the component mounts
   useEffect(() => {
@@ -66,14 +66,14 @@ function App() {
             onClick={() => setLeftTab("markdown")}
             type="button"
           >
-            본문내용 입력
+            Markdown
           </button>
           <button
             className={"tab-btn" + (leftTab === "css" ? " active-tab" : "")}
             onClick={() => setLeftTab("css")}
             type="button"
           >
-            사용자 추가 CSS 입력
+            Custom-CSS
           </button>
         </div>
         {leftTab === "markdown" ? (
@@ -85,7 +85,7 @@ function App() {
           />
         ) : (
           <textarea
-            className="markdown-input monospace-font"
+            className="markdown-input custom-css"
             value={userCss}
             onChange={e => setUserCss(e.target.value)}
             placeholder="여기에 CSS를 입력하세요..."
@@ -96,21 +96,21 @@ function App() {
       <section className="split-pane right-pane">
         <div className="tab-bar">
           <button
-            className={"tab-btn" + (tab === "result" ? " active-tab" : "")}
-            onClick={() => setTab("result")}
+            className={"tab-btn" + (tab === "html_output" ? " active-tab" : "")}
+            onClick={() => setTab("html_output")}
             type="button"
           >
-            HTML 결과
+            HTML Output
           </button>
           <button
-            className={"tab-btn" + (tab === "code" ? " active-tab" : "")}
-            onClick={() => setTab("code")}
+            className={"tab-btn" + (tab === "html_code" ? " active-tab" : "")}
+            onClick={() => setTab("html_code")}
             type="button"
           >
-            HTML 코드
+            HTML Code
           </button>
         </div>
-        {tab === "result" ? (
+        {tab === "html_output" ? (
           <div
             className="html-output"
             dangerouslySetInnerHTML={{ __html: html }}
