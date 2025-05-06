@@ -29,6 +29,8 @@ function App() {
   const [userCss, setUserCss] = useState("");
   const [leftTab, setLeftTab] = useState<'markdown' | 'css'>("markdown");
   const [tab, setTab] = useState<'html_output' | 'html_code'>("html_output");
+  const [withoutStyle, setWithoutStyle] = useState(true); // 기본값을 true로 변경
+  const [bloggerCodeblock, setBloggerCodeblock] = useState(true); // 기본값을 true로 변경
 
   // Load sample.md content when the component mounts
   useEffect(() => {
@@ -53,9 +55,35 @@ function App() {
     }
   }, []);
 
+  // 기본 HTML 생성 - 이 HTML은 "HTML Output" 탭에 표시됨
   const html = marked.parse(markdown);
-  // 사용자 CSS도 함께 style에 포함
-  const bloggerHtml = `\n<style>\n${appCss}\n${userCss}\n</style>\n<div class="blogger-html-body">\n${html}\n</div>`;
+  
+  // "HTML Code" 탭용 HTML 생성 - 체크박스 상태에 따라 다른 HTML 생성
+  let bloggerHtml = '';
+  
+  if (withoutStyle) {
+    // 스타일 없이 HTML만 포함
+    bloggerHtml = `<div class="blogger-html-body">\n${html}\n</div>`;
+  } else {
+    // 기본: 사용자 CSS와 함께 style 포함
+    bloggerHtml = `\n<style>\n${appCss}\n${userCss}\n</style>\n<div class="blogger-html-body">\n${html}\n</div>`;
+  }
+  
+  // Blogger 코드블록 기능 적용 (HTML Code 탭에만 영향)
+  if (bloggerCodeblock) {
+    // <pre><code> 태그에 prettyprint 클래스 추가
+    bloggerHtml = bloggerHtml
+      // 언어가 지정된 코드블록
+      .replace(
+        /<pre><code class="language-([^"]+)">/g, 
+        '<pre class="prettyprint"><code class="language-$1">'
+      )
+      // 언어가 지정되지 않은 일반 코드블록
+      .replace(
+        /<pre><code>/g, 
+        '<pre class="prettyprint"><code>'
+      );
+  }
 
   return (
     <main className="split-container">
@@ -109,6 +137,27 @@ function App() {
           >
             HTML Code
           </button>
+          
+          {tab === "html_code" && (
+            <div className="checkbox-container">
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={withoutStyle}
+                  onChange={() => setWithoutStyle(!withoutStyle)}
+                />
+                Without Style
+              </label>
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={bloggerCodeblock}
+                  onChange={() => setBloggerCodeblock(!bloggerCodeblock)}
+                />
+                Blogger Codeblock
+              </label>
+            </div>
+          )}
         </div>
         {tab === "html_output" ? (
           <div
