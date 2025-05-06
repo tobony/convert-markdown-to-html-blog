@@ -32,9 +32,6 @@ function hello() {
 > 이것은 인용문입니다.
 > 여러 줄로 작성할 수 있습니다.
 
----
-
-즐거운 마크다운 변환 되세요!
 
 # h1 Heading
 ## h2 Heading
@@ -43,7 +40,6 @@ function hello() {
 
 
 ## Horizontal Rules
-
 ___
 
 ---
@@ -65,38 +61,35 @@ _This is italic text_
 
 ## Blockquotes
 
-
 > Blockquotes can also be nested...
 >> ...by using additional greater-than signs right next to each other...
 > > > ...or with spaces between arrows.
 
 
 ## Lists
-
 Unordered
-
-+ Create a list by starting a line with `+`, `-`, or `*`
-+ Sub-lists are made by indenting 2 spaces:
-  - Marker character change forces new list start:
-    * Ac tristique libero volutpat at
-    + Facilisis in pretium nisl aliquet
-    - Nulla volutpat aliquam velit
-+ Very easy!
++ Create Excel lists by starting with functions like `SUM`, `AVERAGE`, or `COUNT`
++ Advanced functions are categorized by type:
+  - Mathematical functions for calculations:
+    * SUM to add values in a range
+    + AVERAGE to find the mean of values
+    - MAX and MIN to find highest and lowest values
++ Excel makes data analysis easy!
 
 Ordered
 
-1. Lorem ipsum dolor sit amet
-2. Consectetur adipiscing elit
-3. Integer molestie lorem at massa
+1. Calculate sum of a cell range using the SUM function
+2. Find data from another table using the VLOOKUP function
+3. Perform conditional calculations using the IF function
 
 
-1. You can use sequential numbers...
-1. ...or keep all the numbers as `1.`
+1. Use sequential numbering or...
+1. ...keep all numbers as `1.`
 
-Start numbering with offset:
+Start from a specific number:
 
-57. foo
-1. bar
+57. Combine text using the CONCATENATE function
+1. Calculate average values using the AVERAGE function
 
 
 ## Code
@@ -134,19 +127,19 @@ print("hello")
 
 ## Tables
 
-| Option | Description |
-| ------ | ----------- |
-| data   | path to data files to supply the data that will be passed into templates. |
-| engine | engine to be used for processing templates. Handlebars is the default. |
-| ext    | extension to be used for dest files. |
+| Excel Function | Description |
+| -------------- | ----------- |
+| EVALUATE       | Evaluates a formula or expression and returns the result. |
+| TEXTJOIN       | Combines text from multiple ranges or strings, using a delimiter. |
+| FILTER         | Filters a range of data based on criteria you define. |
 
 Right aligned columns
 
-| Option | Description |
-| ------:| -----------:|
-| data   | path to data files to supply the data that will be passed into templates. |
-| engine | engine to be used for processing templates. Handlebars is the default. |
-| ext    | extension to be used for dest files. |
+| Excel Function | Description |
+| --------------:| -----------:|
+| EVALUATE       | Evaluates a formula or expression and returns the result. |
+| TEXTJOIN       | Combines text from multiple ranges or strings, using a delimiter. |
+| FILTER         | Filters a range of data based on criteria you define. |
 
 
 ## Links
