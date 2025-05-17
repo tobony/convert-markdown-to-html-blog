@@ -60,6 +60,8 @@ function App() {
   const [tab, setTab] = useState<'html_output' | 'html_code'>("html_output");
   const [withoutStyle, setWithoutStyle] = useState(true); // 기본값을 true로 변경
   const [bloggerCodeblock, setBloggerCodeblock] = useState(true); // 기본값을 true로 변경
+  const [applyUserCss, setApplyUserCss] = useState(true); // New state for applying user CSS
+  const [removeCitations, setRemoveCitations] = useState(false); // New state for removing citations
 
   // Load sample.md content when the component mounts
   useEffect(() => {
@@ -84,8 +86,14 @@ function App() {
     }
   }, []);
 
+  // Process markdown based on removeCitations state
+  let processedMarkdown = markdown;
+  if (removeCitations) {
+    processedMarkdown = processedMarkdown.replace(/^>.*(\n|$)/gm, ''); // Remove blockquote lines
+  }
+
   // 기본 HTML 생성 - 이 HTML은 "HTML Output" 탭에 표시됨
-  const html = marked.parse(markdown);
+  const html = marked.parse(processedMarkdown);
   
   // "HTML Code" 탭용 HTML 생성 - 체크박스 상태에 따라 다른 HTML 생성
   let bloggerHtml = '';
@@ -94,8 +102,12 @@ function App() {
     // 스타일 없이 HTML만 포함
     bloggerHtml = `<div class="blogger-html-body">\n${html}\n</div>`;
   } else {
-    // 기본: 사용자 CSS와 함께 style 포함
-    bloggerHtml = `\n<style>\n${appCss}\n${userCss}\n</style>\n<div class="blogger-html-body">\n${html}\n</div>`;
+    // 스타일 포함
+    let effectiveStyles = appCss; // Start with base app CSS
+    if (applyUserCss) { // Conditionally add userCss if applyUserCss is true
+      effectiveStyles += `\n${userCss}`;
+    }
+    bloggerHtml = `\n<style>\n${effectiveStyles}\n</style>\n<div class="blogger-html-body">\n${html}\n</div>`;
   }
   
   // Blogger 코드블록 기능 적용 (HTML Code 탭에만 영향)
@@ -119,19 +131,43 @@ function App() {
       <section className="split-pane left-pane">
         <div className="tab-bar">
           <button
-            className={"tab-btn" + (leftTab === "markdown" ? " active-tab" : "")}
-            onClick={() => setLeftTab("markdown")}
-            type="button"
+        className={"tab-btn" + (leftTab === "markdown" ? " active-tab" : "")}
+        onClick={() => setLeftTab("markdown")}
+        type="button"
           >
-            Markdown
+        Markdown
           </button>
           <button
-            className={"tab-btn" + (leftTab === "css" ? " active-tab" : "")}
-            onClick={() => setLeftTab("css")}
-            type="button"
-          >
-            Custom-CSS
+        className={"tab-btn" + (leftTab === "css" ? " active-tab" : "")}
+        onClick={() => setLeftTab("css")}
+        type="button"
+        >
+        Custom-CSS
           </button>
+          {leftTab === "markdown" && (
+        <div className="checkbox-container" style={{ marginLeft: "auto" }}>
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={removeCitations}
+              onChange={() => setRemoveCitations(!removeCitations)}
+            />
+            Remove citation
+          </label>
+        </div>
+          )}
+          {leftTab === "css" && (
+        <div className="checkbox-container" style={{ marginLeft: "auto" }}>
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={applyUserCss}
+              onChange={() => setApplyUserCss(!applyUserCss)}
+            />
+            Apply Custom CSS
+          </label>
+        </div>
+          )}
         </div>
         {leftTab === "markdown" ? (
           <textarea
