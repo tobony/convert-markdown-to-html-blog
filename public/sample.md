@@ -1,3 +1,27 @@
+
+## Firebase Genkit과 Ollama 연동 방법
+
+**Firebase Genkit**과 **Ollama**는 플러그인 방식을 통해 쉽게 연동할 수 있습니다. Ollama는 로컬에서 다양한 오픈소스 LLM(대형 언어 모델)을 실행할 수 있는 서버이며, Genkit은 이 Ollama 서버에 직접 연결하여 AI 기능을 활용할 수 있게 해줍니다.
+
+
+6. **Genkit 개발자 UI 및 워크플로우 테스트**
+   - `genkit start` 명령어로 Genkit UI를 실행하고, 브라우저에서 워크플로우를 테스트할 수 있습니다.
+   - 기본 주소: `http://localhost:4000`
+     [1][3][5]
+
+이 과정을 통해 Firebase Genkit과 Ollama를 연동하여, 로컬 또는 서버 환경에서 다양한 AI 모델을 활용한 앱을 빠르게 개발할 수 있습니다[1][2][4][5].
+
+Citations:
+[1] https://firebase.google.com/docs/genkit-go/plugins/ollama
+[2] https://firebase.google.com/docs/genkit/plugins/ollama
+[3] https://github.com/xavidop/firebase-genkit-ollama
+[4] https://ollama.com/blog/firebase-genkit
+
+
+---
+
+
+
 # 마크다운 샘플 파일
 
 이 파일은 애플리케이션이 처음 실행될 때 로드되는 샘플 마크다운 파일입니다.
@@ -169,3 +193,4 @@ With a reference later in the document defining the URL location:
 
 
 <br/><br/><br/>
+

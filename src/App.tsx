@@ -89,7 +89,12 @@ function App() {
   // Process markdown based on removeCitations state
   let processedMarkdown = markdown;
   if (removeCitations) {
-    processedMarkdown = processedMarkdown.replace(/^>.*(\n|$)/gm, ''); // Remove blockquote lines
+    // Remove [1][2]... style citations
+    processedMarkdown = processedMarkdown.replace(/(\[\d+\])+/g, ''); // Corrected regex
+    // Remove "Citations:" section and everything after it
+    processedMarkdown = processedMarkdown.replace(/^Citations:[\s\S]*?(\n\s*\n|$)/gm, ''); // Refined regex to be less greedy
+    // Remove any leading/trailing newlines that might be left
+    processedMarkdown = processedMarkdown.trim();
   }
 
   // 기본 HTML 생성 - 이 HTML은 "HTML Output" 탭에 표시됨
