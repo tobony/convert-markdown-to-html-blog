@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, KeyboardEvent } from "react";
 import { marked } from "marked";
 import { markedHighlight } from "marked-highlight";
 // highlight.js 최적화: 코어만 임포트하고 필요한 언어만 추가
@@ -62,6 +62,7 @@ function App() {
   const [bloggerCodeblock, setBloggerCodeblock] = useState(true); // 기본값을 true로 변경
   const [applyUserCss, setApplyUserCss] = useState(true); // New state for applying user CSS
   const [removeCitations, setRemoveCitations] = useState(false); // New state for removing citations
+  const htmlOutputRef = useRef<HTMLDivElement>(null); // Ref for the HTML output div
 
   // Load sample.md content when the component mounts
   useEffect(() => {
@@ -130,6 +131,21 @@ function App() {
         '<pre class="prettyprint"><code>'
       );
   }
+
+  const handleHtmlOutputKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === 'a') {
+      event.preventDefault();
+      if (htmlOutputRef.current) {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(htmlOutputRef.current);
+        if (selection) {
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
+      }
+    }
+  };
 
   return (
     <main className="split-container">
@@ -231,8 +247,11 @@ function App() {
         </div>
         {tab === "html_output" ? (
           <div
+            ref={htmlOutputRef}
             className="html-output"
             dangerouslySetInnerHTML={{ __html: html }}
+            tabIndex={0} // Make the div focusable
+            onKeyDown={handleHtmlOutputKeyDown} // Handle key down for Ctrl+A
           />
         ) : (
           <textarea

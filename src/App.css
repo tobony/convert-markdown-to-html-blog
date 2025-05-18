@@ -72,6 +72,7 @@ button {
   background-color: #ffffff;
   transition: border-color 0.25s;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  outline: none; /* 통합 */
 }
 
 button {
@@ -84,11 +85,6 @@ button:hover {
 button:active {
   border-color: #396cd8;
   background-color: #e8e8e8;
-}
-
-input,
-button {
-  outline: none;
 }
 
 #greet-input {
@@ -128,10 +124,6 @@ button {
   border-left: none;
 }
 
-main, .markdown-input, .html-output, textarea {
-  font-family: 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', Arial, sans-serif;
-}
-
 .markdown-input, .html-output {
   flex: 1;
   width: 100%;
@@ -141,7 +133,7 @@ main, .markdown-input, .html-output, textarea {
   padding: 0px 0px;
   border: 1.5px solid #e3e7ef;
   border-radius: 8px;
-  background: #f8fafc;
+  /* background: #f8fafc; */
   margin-top: 5px;
   box-shadow: 0 1px 3px 0 rgba(60, 80, 120, 0.05);
   outline: none;
@@ -151,10 +143,12 @@ main, .markdown-input, .html-output, textarea {
   overflow: auto; /* 스크롤바 추가 */
 }
 
-.markdown-input.custom-css, textarea.html-output {
-  font-family: 'D2Coding', Consolas, Monaco, 'Nanum Gothic Coding', 'Noto Sans Mono CJK KR', monospace;
-  font-size: 1.0rem;
-  line-height: 1.5;
+textarea.markdown-input, textarea.html-output {
+  font-family: 'Noto Sans KR',
+    'Malgun Gothic',
+    'Apple SD Gothic Neo','D2Coding', Consolas, Monaco, 'Nanum Gothic Coding', 'Noto Sans Mono CJK KR', monospace;
+  font-size: 1.0rem; /* Adjusted to match parent container font-size */
+  line-height: 1.6; /* Adjusted to match .html-output pre */
 }
 
 
@@ -163,7 +157,6 @@ main, .markdown-input, .html-output, textarea {
   border-collapse: collapse;
   margin: 25px 0;
   font-size: 0.92em;
-  font-family: 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', Arial, sans-serif;
   min-width: 400px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
@@ -319,6 +312,7 @@ main, .markdown-input, .html-output, textarea {
   font-size: 0.9rem;
   color: #666;
   cursor: pointer;
+  -webkit-user-select: none; /* Safari 호환성 추가 */
   user-select: none;
 }
 
@@ -349,6 +343,9 @@ main, .markdown-input, .html-output, textarea {
   }
 }
 
+
+/* ************* */
+/* ************* */
 /* 다크모드 대응 */
 @media (prefers-color-scheme: dark) {
   :root {
@@ -402,15 +399,14 @@ main, .markdown-input, .html-output, textarea {
   
   .markdown-input, .html-output {
     background: #2a2a2a;
-    border-color: #444;
-    color: #f6f6f6;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-    box-sizing: border-box;
+    border-color: #555;
+    color: #eee;
   }
   
-  .markdown-input:focus {
-    border-color: #24c8db;
-    box-shadow: 0 1px 4px rgba(36, 200, 219, 0.3);
+  textarea.markdown-input, textarea.html-output {
+    font-family: 'D2Coding', Consolas, Monaco, 'Nanum Gothic Coding', 'Noto Sans Mono CJK KR', monospace;
+    font-size: 1.0rem;
+    line-height: 1.6;
   }
 
   .html-output pre {
