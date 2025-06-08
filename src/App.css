@@ -139,6 +139,15 @@ button:active {
   background: #005a48;
 }
 
+.function-btn.copied {
+  background: #005a48; /* 더 어두운 색으로 변경 */
+  color: white;
+}
+
+.function-btn.copied:hover {
+  background: #005a48; /* 호버 시에도 같은 색상 유지 */
+}
+
 .split-panes {
   display: flex;
   flex: 1;
@@ -186,6 +195,37 @@ button:active {
   box-sizing: border-box;
   line-height: 1.6;
   overflow: auto; /* 스크롤바 추가 */
+}
+
+/* 동적 텍스트 색상 적용 - p 태그의 본문만 */
+/* .html-output 자체에는 색상을 적용하지 않음 - 상속 방지 */
+
+/* p 태그와 일반 텍스트만 색상 적용 */
+.html-output p {
+  color: var(--dynamic-text-color, inherit) !important;
+}
+
+/* 리스트 내 텍스트도 적용 */
+.html-output li {
+  color: var(--dynamic-text-color, inherit) !important;
+}
+
+/* 인용문 내 텍스트도 적용 */
+.html-output blockquote {
+  color: var(--dynamic-text-color, inherit) !important;
+}
+
+/* 헤딩과 강조 요소는 명시적으로 원래 색상 유지 */
+.html-output h1,
+.html-output h2, 
+.html-output h3,
+.html-output h4,
+.html-output h5,
+.html-output h6,
+.html-output strong,
+.html-output em,
+.html-output a {
+  color: inherit !important;
 }
 
 textarea.markdown-input, textarea.html-output {
