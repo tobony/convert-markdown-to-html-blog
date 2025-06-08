@@ -62,6 +62,9 @@ function App() {
   const [bloggerCodeblock, setBloggerCodeblock] = useState(true); // 기본값을 true로 변경
   const [applyUserCss, setApplyUserCss] = useState(true); // New state for applying user CSS
   const [removeCitations, setRemoveCitations] = useState(false); // New state for removing citations
+  // 새로운 상태 변수들 추가
+  const [functionCheckbox1, setFunctionCheckbox1] = useState(false);
+  const [functionCheckbox2, setFunctionCheckbox2] = useState(false);
   const htmlOutputRef = useRef<HTMLDivElement>(null); // Ref for the HTML output div
 
   // Load sample.md content when the component mounts
@@ -147,121 +150,162 @@ function App() {
     }
   };
 
-  return (
+  // 기능 버튼 핸들러들
+  const handleFunction1 = () => {
+    console.log("기능 버튼 1 클릭됨");
+    // 여기에 기능 1 로직 추가
+  };
+
+  const handleFunction2 = () => {
+    console.log("기능 버튼 2 클릭됨");
+    // 여기에 기능 2 로직 추가
+  };  return (
     <main className="split-container">
-      <section className="split-pane left-pane">
-        <div className="tab-bar">
-          <button
-        className={"tab-btn" + (leftTab === "markdown" ? " active-tab" : "")}
-        onClick={() => setLeftTab("markdown")}
-        type="button"
-          >
-        Markdown
-          </button>
-          <button
-        className={"tab-btn" + (leftTab === "css" ? " active-tab" : "")}
-        onClick={() => setLeftTab("css")}
-        type="button"
+      <div className="function-bar">
+        <button 
+          type="button" 
+          className="function-btn"
+          onClick={handleFunction1}
         >
-        Custom-CSS
-          </button>
-          {leftTab === "markdown" && (
-        <div className="checkbox-container" style={{ marginLeft: "auto" }}>
-          <label className="checkbox-label">
-            <input
-              type="checkbox"
-              checked={removeCitations}
-              onChange={() => setRemoveCitations(!removeCitations)}
-            />
-            Remove citation
-          </label>
-        </div>
-          )}
-          {leftTab === "css" && (
-        <div className="checkbox-container" style={{ marginLeft: "auto" }}>
-          <label className="checkbox-label">
-            <input
-              type="checkbox"
-              checked={applyUserCss}
-              onChange={() => setApplyUserCss(!applyUserCss)}
-            />
-            Apply Custom CSS
-          </label>
-        </div>
-          )}
-        </div>
-        {leftTab === "markdown" ? (
-          <textarea
-            className="markdown-input"
-            value={markdown}
-            onChange={e => setMarkdown(e.target.value)}
-            placeholder="여기에 마크다운을 입력하세요..."
+          기능버튼1
+        </button>
+        <button 
+          type="button" 
+          className="function-btn"
+          onClick={handleFunction2}
+        >
+          기능버튼2
+        </button>
+        <label className="checkbox-label">
+          <input
+            type="checkbox"
+            checked={functionCheckbox1}
+            onChange={() => setFunctionCheckbox1(!functionCheckbox1)}
           />
-        ) : (
-          <textarea
-            className="markdown-input custom-css"
-            value={userCss}
-            onChange={e => setUserCss(e.target.value)}
-            placeholder="여기에 CSS를 입력하세요..."
-            style={{ minHeight: 200 }}
+          체크박스1
+        </label>
+        <label className="checkbox-label">
+          <input
+            type="checkbox"
+            checked={functionCheckbox2}
+            onChange={() => setFunctionCheckbox2(!functionCheckbox2)}
           />
-        )}
-      </section>
-      <section className="split-pane right-pane">
-        <div className="tab-bar">
-          <button
-            className={"tab-btn" + (tab === "html_output" ? " active-tab" : "")}
-            onClick={() => setTab("html_output")}
-            type="button"
+          체크박스2
+        </label>
+      </div>
+
+      <div className="split-panes">
+        <section className="split-pane left-pane">
+          <div className="tab-bar">
+            <button
+          className={"tab-btn" + (leftTab === "markdown" ? " active-tab" : "")}
+          onClick={() => setLeftTab("markdown")}
+          type="button"
+            >
+          Markdown
+            </button>
+            <button
+          className={"tab-btn" + (leftTab === "css" ? " active-tab" : "")}
+          onClick={() => setLeftTab("css")}
+          type="button"
           >
-            HTML Output
-          </button>
-          <button
-            className={"tab-btn" + (tab === "html_code" ? " active-tab" : "")}
-            onClick={() => setTab("html_code")}
-            type="button"
-          >
-            HTML Code
-          </button>
-          
-          {tab === "html_code" && (
-            <div className="checkbox-container">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={withoutStyle}
-                  onChange={() => setWithoutStyle(!withoutStyle)}
-                />
-                Without Style
-              </label>
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={bloggerCodeblock}
-                  onChange={() => setBloggerCodeblock(!bloggerCodeblock)}
-                />
-                Blogger Codeblock
-              </label>
-            </div>
+          Custom-CSS
+            </button>            {leftTab === "markdown" && (
+          <div className="checkbox-container margin-left-auto">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={removeCitations}
+                onChange={() => setRemoveCitations(!removeCitations)}
+              />
+              Remove citation
+            </label>
+          </div>
+            )}
+            {leftTab === "css" && (
+          <div className="checkbox-container margin-left-auto">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={applyUserCss}
+                onChange={() => setApplyUserCss(!applyUserCss)}
+              />
+              Apply Custom CSS
+            </label>
+          </div>
+            )}
+          </div>
+          {leftTab === "markdown" ? (
+            <textarea
+              className="markdown-input"
+              value={markdown}
+              onChange={e => setMarkdown(e.target.value)}
+              placeholder="여기에 마크다운을 입력하세요..."
+            />
+          ) : (
+            <textarea
+              className="markdown-input custom-css custom-css-textarea"
+              value={userCss}
+              onChange={e => setUserCss(e.target.value)}
+              placeholder="여기에 CSS를 입력하세요..."
+            />
           )}
-        </div>
-        {tab === "html_output" ? (
-          <div
-            ref={htmlOutputRef}
-            className="html-output"
-            dangerouslySetInnerHTML={{ __html: html }}
-            tabIndex={0} // Make the div focusable
-            onKeyDown={handleHtmlOutputKeyDown} // Handle key down for Ctrl+A
-          />
-        ) : (
-          <textarea
-            className="html-output"
-            style={{ whiteSpace: "pre", minHeight: 300 }}
-            value={bloggerHtml}
-            readOnly
-          />
-        )}
-      </section>
+        </section>
+        <section className="split-pane right-pane">
+          <div className="tab-bar">
+            <button
+              className={"tab-btn" + (tab === "html_output" ? " active-tab" : "")}
+              onClick={() => setTab("html_output")}
+              type="button"
+            >
+              HTML Output
+            </button>
+            <button
+              className={"tab-btn" + (tab === "html_code" ? " active-tab" : "")}
+              onClick={() => setTab("html_code")}
+              type="button"
+            >
+              HTML Code
+            </button>
+            
+            {tab === "html_code" && (
+              <div className="checkbox-container">
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={withoutStyle}
+                    onChange={() => setWithoutStyle(!withoutStyle)}
+                  />
+                  Without Style
+                </label>
+                <label className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    checked={bloggerCodeblock}
+                    onChange={() => setBloggerCodeblock(!bloggerCodeblock)}
+                  />
+                  Blogger Codeblock
+                </label>
+              </div>
+            )}
+          </div>
+          {tab === "html_output" ? (
+            <div
+              ref={htmlOutputRef}
+              className="html-output"
+              dangerouslySetInnerHTML={{ __html: html }}
+              tabIndex={0} // Make the div focusable
+              onKeyDown={handleHtmlOutputKeyDown} // Handle key down for Ctrl+A
+            />          ) : (
+            <textarea
+              className="html-output html-output-textarea"
+              value={bloggerHtml}
+              readOnly
+              aria-label="Generated HTML Code"
+            />
+          )}
+        </section>
+      </div>
     </main>
   );
 }
