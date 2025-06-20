@@ -248,7 +248,7 @@ textarea.markdown-input, textarea.html-output {
 
 /* 헤딩 스타일링 */
 .html-output h1 {
-  font-size: 2.2rem;
+  font-size: 2.0rem;
   margin-top: 1.2em;
   margin-bottom: 0.8em;
   font-weight: 700;
@@ -256,7 +256,7 @@ textarea.markdown-input, textarea.html-output {
 }
 
 .split-pane .html-output h2 {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   margin-top: 1.1em;
   margin-bottom: 0.7em;
   font-weight: 600;
@@ -264,7 +264,7 @@ textarea.markdown-input, textarea.html-output {
 }
 
 .html-output h3 {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   margin-top: 1em;
   margin-bottom: 0.6em;
   font-weight: 600;
@@ -272,7 +272,7 @@ textarea.markdown-input, textarea.html-output {
 }
 
 .html-output h4 {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   margin-top: 0.9em;
   margin-bottom: 0.5em;
   font-weight: 600;
