@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useGitHubConfig } from '../hooks/use-github-config';
 
 interface GitHubConfigDialogProps {
@@ -8,6 +8,7 @@ interface GitHubConfigDialogProps {
 
 const GitHubConfigDialog: React.FC<GitHubConfigDialogProps> = ({ isOpen, onClose }) => {
   const { settings, saveSettings } = useGitHubConfig();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     enabled: settings.enabled,
     token: settings.token,
@@ -30,6 +31,93 @@ const GitHubConfigDialog: React.FC<GitHubConfigDialogProps> = ({ isOpen, onClose
       branch: settings.branch,
     });
     onClose();
+  };
+
+  // 설정 내보내기 (백업)
+  const handleExportSettings = () => {
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    const filename = `github-config-backup-${timestamp}.json`;
+    
+    const configData = {
+      version: '1.0',
+      exportDate: now.toISOString(),
+      settings: {
+        enabled: formData.enabled,
+        token: formData.token,
+        owner: formData.owner,
+        repo: formData.repo,
+        branch: formData.branch,
+      }
+    };
+
+    const blob = new Blob([JSON.stringify(configData, null, 2)], { 
+      type: 'application/json' 
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    alert(`설정이 ${filename} 파일로 내보내졌습니다.`);
+  };
+
+  // 설정 가져오기 (복원)
+  const handleImportSettings = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target?.result as string;
+        const configData = JSON.parse(content);
+        
+        // 파일 검증
+        if (!configData.settings || !configData.version) {
+          throw new Error('유효하지 않은 설정 파일 형식입니다.');
+        }
+
+        const { settings: importedSettings } = configData;
+        
+        // 필수 필드 검증
+        if (typeof importedSettings.enabled !== 'boolean' ||
+            typeof importedSettings.token !== 'string' ||
+            typeof importedSettings.owner !== 'string' ||
+            typeof importedSettings.repo !== 'string' ||
+            typeof importedSettings.branch !== 'string') {
+          throw new Error('설정 파일의 데이터 형식이 올바르지 않습니다.');
+        }
+
+        // 설정 적용
+        setFormData({
+          enabled: importedSettings.enabled,
+          token: importedSettings.token,
+          owner: importedSettings.owner,
+          repo: importedSettings.repo,
+          branch: importedSettings.branch,
+        });
+
+        alert('설정이 성공적으로 가져와졌습니다.');
+      } catch (error) {
+        console.error('설정 가져오기 실패:', error);
+        alert(`설정 가져오기 실패: ${error instanceof Error ? error.message : '알 수 없는 오류'}`);
+      }
+    };
+    
+    reader.readAsText(file);
+    // 같은 파일을 다시 선택할 수 있도록 value 초기화
+    event.target.value = '';
   };
 
   if (!isOpen) return null;
@@ -115,16 +203,41 @@ const GitHubConfigDialog: React.FC<GitHubConfigDialogProps> = ({ isOpen, onClose
               </div>
             </>
           )}
+        </div>        <div className="github-config-footer">
+          <div className="github-config-backup-actions">
+            <button 
+              className="github-config-btn-backup" 
+              onClick={handleExportSettings}
+              type="button"
+            >
+              📁 설정 내보내기
+            </button>
+            <button 
+              className="github-config-btn-restore" 
+              onClick={handleImportSettings}
+              type="button"
+            >
+              📂 설정 가져오기
+            </button>
+          </div>
+          <div className="github-config-main-actions">
+            <button className="github-config-btn-cancel" onClick={handleCancel}>
+              취소
+            </button>
+            <button className="github-config-btn-save" onClick={handleSave}>
+              저장
+            </button>
+          </div>
         </div>
-
-        <div className="github-config-footer">
-          <button className="github-config-btn-cancel" onClick={handleCancel}>
-            취소
-          </button>
-          <button className="github-config-btn-save" onClick={handleSave}>
-            저장
-          </button>
-        </div>
+          {/* 숨겨진 파일 입력 요소 */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".json"
+          onChange={handleFileImport}
+          className="github-config-file-input"
+          aria-label="설정 파일 선택"
+        />
       </div>
     </div>
   );
