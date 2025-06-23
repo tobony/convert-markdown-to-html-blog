@@ -125,10 +125,17 @@ button:active {
   font-weight: 500;
   transition: background-color 0.2s;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-  min-height: 24px; /* 높이를 절반으로 축소 */
+  min-height: 32px; /* 높이를 32px로 통일 */
+  height: 32px; /* 명시적으로 높이 지정 */
   display: flex;
   align-items: center;
   justify-content: center;
+  line-height: 1; /* 텍스트 라인 높이 통일 */
+}
+
+/* 아이콘이 포함된 버튼의 SVG 정렬 */
+.function-btn svg {
+  display: block;
 }
 
 .function-btn:hover {
@@ -146,6 +153,225 @@ button:active {
 
 .function-btn.copied:hover {
   background: #003d30; /* 호버 시에도 같은 색상 유지 */
+}
+
+.function-btn.uploading {
+  background: #6b7280; /* 회색으로 변경 */
+  color: white;
+  cursor: not-allowed;
+}
+
+.function-btn.uploading:hover {
+  background: #6b7280; /* 호버 시에도 같은 색상 유지 */
+}
+
+.function-btn:disabled {
+  background: #6b7280;
+  color: white;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* GitHub 설정 다이얼로그 스타일 */
+.github-config-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.github-config-dialog {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow: auto;
+}
+
+.github-config-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.github-config-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.github-config-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.github-config-close:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.github-config-content {
+  padding: 1.5rem;
+}
+
+.github-config-field {
+  margin-bottom: 1rem;
+}
+
+.github-config-field label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+.github-config-field input[type="text"],
+.github-config-field input[type="password"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+}
+
+.github-config-field input[type="text"]:focus,
+.github-config-field input[type="password"]:focus {
+  outline: none;
+  border-color: #009879;
+  box-shadow: 0 0 0 3px rgba(0, 152, 121, 0.1);
+}
+
+.github-config-field input[type="checkbox"] {
+  margin-right: 0.5rem;
+  transform: scale(1.1);
+}
+
+.github-config-field small {
+  display: block;
+  margin-top: 0.25rem;
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+
+.github-config-guide {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.github-config-guide h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.github-config-guide ol {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.github-config-guide li {
+  margin-bottom: 0.25rem;
+}
+
+.github-config-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.github-config-backup-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.github-config-main-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.github-config-btn-cancel,
+.github-config-btn-save,
+.github-config-btn-backup,
+.github-config-btn-restore {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.github-config-btn-cancel {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.github-config-btn-cancel:hover {
+  background: #e5e7eb;
+}
+
+.github-config-btn-save {
+  background: #009879;
+  color: white;
+  border: 1px solid #009879;
+}
+
+.github-config-btn-save:hover {
+  background: #007a61;
+}
+
+.github-config-btn-backup,
+.github-config-btn-restore {
+  background: #6366f1;
+  color: white;
+  border: 1px solid #6366f1;
+  font-size: 0.8rem;
+}
+
+.github-config-btn-backup:hover,
+.github-config-btn-restore:hover {
+  background: #4f46e5;
+  border-color: #4f46e5;
+}
+
+/* 숨겨진 파일 입력 */
+.github-config-file-input {
+  display: none;
 }
 
 .split-panes {
@@ -432,7 +658,6 @@ textarea.markdown-input, textarea.html-output {
     padding: 0;
     height: 100vh;
   }
-
   /* 기능 버튼 바 모바일 최적화 */
   .function-bar {
     padding: 0.5rem 0.75rem;
@@ -440,12 +665,15 @@ textarea.markdown-input, textarea.html-output {
     min-height: 40px;
     flex-wrap: wrap;
     justify-content: flex-start;
+    /* 버튼들이 2줄로 배치될 수 있도록 */
+    max-width: 100%;
+    overflow: hidden;
   }
-
   .function-btn {
     padding: 0.5rem 0.75rem;
     font-size: 0.9rem;
     min-height: 36px;
+    height: 36px; /* 모바일에서도 명시적 높이 지정 */
     min-width: 70px;
     border-radius: 6px;
     touch-action: manipulation; /* 터치 최적화 */
@@ -584,6 +812,7 @@ textarea.markdown-input, textarea.html-output {
     padding: 0.4rem 0.6rem;
     font-size: 0.85rem;
     min-height: 32px;
+    height: 32px; /* 작은 모바일에서도 명시적 높이 지정 */
     min-width: 60px;
   }
 
@@ -614,9 +843,46 @@ textarea.markdown-input, textarea.html-output {
   .split-pane .html-output h2 {
     font-size: 1.3rem;
   }
-
   .html-output h3 {
     font-size: 1.1rem;
+  }
+
+  /* 작은 모바일에서 GitHub 설정 다이얼로그 최적화 */
+  .github-config-dialog {
+    max-width: 95vw;
+    max-height: 90vh;
+    margin: 1rem;
+  }
+
+  .github-config-header {
+    padding: 1rem;
+  }
+
+  .github-config-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .github-config-content {
+    padding: 1rem;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .github-config-footer {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .github-config-backup-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .github-config-btn-backup,
+  .github-config-btn-restore {
+    width: 100%;
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
   }
 }
 
@@ -741,11 +1007,11 @@ textarea.markdown-input, textarea.html-output {
     gap: 0.25rem;
     margin-bottom: 4px;
   }
-
   .function-btn {
     background: #009879;
     color: #fff;
-    min-height: 18px;
+    min-height: 32px; /* 다크모드에서도 높이 통일 */
+    height: 32px; /* 명시적 높이 지정 */
     padding: 0.2rem 0.4rem;
     font-size: 0.95rem;
   }
@@ -756,7 +1022,6 @@ textarea.markdown-input, textarea.html-output {
   .function-btn:active {
     background: #005a48;
   }
-
   .function-btn.copied {
     background: #003d30;
     color: white;
@@ -764,6 +1029,23 @@ textarea.markdown-input, textarea.html-output {
 
   .function-btn.copied:hover {
     background: #003d30;
+  }
+
+  .function-btn.uploading {
+    background: #6b7280;
+    color: white;
+    cursor: not-allowed;
+  }
+
+  .function-btn.uploading:hover {
+    background: #6b7280;
+  }
+
+  .function-btn:disabled {
+    background: #6b7280;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.7;
   }
 
   /* 다크모드 모바일 최적화 */
@@ -774,14 +1056,13 @@ textarea.markdown-input, textarea.html-output {
       padding: 0.5rem 0.75rem;
       gap: 0.5rem;
       min-height: 40px;
-    }
-
-    .function-btn {
+    }    .function-btn {
       background: #009879;
       color: #fff;
       padding: 0.5rem 0.75rem;
       font-size: 0.9rem;
       min-height: 36px;
+      height: 36px; /* 다크모드 모바일에서도 명시적 높이 지정 */
       min-width: 70px;
       border-radius: 6px;
     }
@@ -870,10 +1151,101 @@ textarea.markdown-input, textarea.html-output {
     .markdown-input, .html-output {
       padding: 8px;
       font-size: 0.9rem;
-    }
-
-    .checkbox-label {
+    }    .checkbox-label {
       font-size: 0.85rem;
     }
+  }
+
+  /* GitHub 설정 다이얼로그 다크모드 */
+  .github-config-dialog {
+    background: #333;
+    color: #eee;
+  }
+
+  .github-config-header {
+    border-bottom-color: #444;
+  }
+
+  .github-config-header h2 {
+    color: #eee;
+  }
+
+  .github-config-close {
+    color: #aaa;
+  }
+
+  .github-config-close:hover {
+    background: #444;
+    color: #eee;
+  }
+
+  .github-config-field label {
+    color: #eee;
+  }
+
+  .github-config-field input[type="text"],
+  .github-config-field input[type="password"] {
+    background: #2a2a2a;
+    border-color: #555;
+    color: #eee;
+  }
+
+  .github-config-field input[type="text"]:focus,
+  .github-config-field input[type="password"]:focus {
+    border-color: #009879;
+    box-shadow: 0 0 0 3px rgba(0, 152, 121, 0.2);
+  }
+
+  .github-config-field small {
+    color: #aaa;
+  }
+
+  .github-config-guide {
+    background: #2a2a2a;
+    border-color: #444;
+  }
+
+  .github-config-guide h4 {
+    color: #eee;
+  }
+
+  .github-config-guide ol {
+    color: #aaa;
+  }
+
+  .github-config-footer {
+    border-top-color: #444;
+  }
+
+  .github-config-btn-cancel {
+    background: #444;
+    color: #eee;
+    border-color: #555;
+  }
+
+  .github-config-btn-cancel:hover {
+    background: #555;
+  }
+
+  .github-config-btn-save {
+    background: #009879;
+    color: white;
+    border-color: #009879;
+  }
+  .github-config-btn-save:hover {
+    background: #007a61;
+  }
+
+  .github-config-btn-backup,
+  .github-config-btn-restore {
+    background: #6366f1;
+    color: white;
+    border-color: #6366f1;
+  }
+
+  .github-config-btn-backup:hover,
+  .github-config-btn-restore:hover {
+    background: #4f46e5;
+    border-color: #4f46e5;
   }
 }
