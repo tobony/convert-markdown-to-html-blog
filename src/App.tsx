@@ -672,15 +672,60 @@ function App() {  const [markdown, setMarkdown] = useState("");
           onClick={downloadMarkdown}
         >
           md다운로드
-        </button>
-
-        <button 
+        </button>        <button 
           type="button" 
           className={`function-btn ${isUploading ? 'uploading' : ''}`}
           onClick={handleFunction3}
           disabled={isUploading}
         >
           {isUploading ? '업로드중...' : 'md repo추가'}
+        </button>        <button 
+          type="button" 
+          className="function-btn"
+          onClick={() => {
+            const config = getConfig();
+            if (config && config.owner && config.repo) {
+              const stackEditUrl = `https://stackedit.io/app#providerId=githubWorkspace&owner=${config.owner}&repo=${config.repo}&branch=${config.branch || 'main'}`;
+              window.open(stackEditUrl, '_blank');
+            } else {
+              alert('GitHub 저장소 설정이 필요합니다. 설정 버튼(⚙️)을 클릭하여 설정해주세요.');
+            }
+          }}
+          title="StackEdit으로 편집"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" xmlSpace="preserve" style={{fillRule:"evenodd", clipRule:"evenodd", strokeLinejoin:"round", strokeMiterlimit:"1.41421"}}>
+            <path d="M23.997,6.002c0,-3.311 -2.688,-5.999 -5.999,-5.999l-11.999,0c-3.311,0 -5.999,2.688 -5.999,5.999l0,11.999c0,3.311 2.688,5.999 5.999,5.999l11.999,0c3.311,0 5.999,-2.688 5.999,-5.999l0,-11.999Z" style={{fill:"none"}}/>
+            <clipPath id="_clip1">
+              <path d="M23.997,6.002c0,-3.311 -2.688,-5.999 -5.999,-5.999l-11.999,0c-3.311,0 -5.999,2.688 -5.999,5.999l0,11.999c0,3.311 2.688,5.999 5.999,5.999l11.999,0c3.311,0 5.999,-2.688 5.999,-5.999l0,-11.999Z"/>
+            </clipPath>
+            <g clipPath="url(#_clip1)">
+              <path d="M23.997,0.003l-24,0l12,12l12,-12Z" style={{fill:"#ffd700"}}/>
+              <path d="M-0.003,0.003l0,24l12,-12l-12,-12Z" style={{fill:"#a5c700"}}/>
+              <path d="M-0.003,24.003l24,0l-12,-12l-12,12Z" style={{fill:"#ff8a00"}}/>
+              <path d="M23.997,24.003l0,-24l-12,12l12,12Z" style={{fill:"#66aefd"}}/>
+            </g>
+            <path d="M21.75,5.852c0,-2.195 -1.782,-3.977 -3.977,-3.977l-11.546,0c-2.195,0 -3.977,1.782 -3.977,3.977l0,11.546c0,2.195 1.782,3.977 3.977,3.977l11.546,0c2.195,0 3.977,-1.782 3.977,-3.977l0,-11.546Z" style={{fill:"#fff"}}/>
+            <path d="M4.633,6.013l1.37,0l0,-1.828l1.399,0l0,1.828l1.696,0l0,-1.828l1.399,0l0,1.828l1.37,0l0,1.691l-1.37,0l0,1.902l1.37,0l0,1.69l-1.37,0l0,1.829l-1.399,0l0,-1.829l-1.696,0l0,1.829l-1.399,0l0,-1.829l-1.37,0l0,-1.69l1.37,0l0,-1.902l-1.37,0l0,-1.691Zm2.769,1.691l0,1.902l1.696,0l0,-1.902l-1.696,0Z" style={{fill:"#737373"}}/>
+          </svg>
+        </button>
+
+        <button 
+          type="button" 
+          className="function-btn"
+          onClick={() => {
+            const config = getConfig();
+            if (config && config.owner && config.repo) {
+              const repoUrl = `https://github.com/${config.owner}/${config.repo}`;
+              window.open(repoUrl, '_blank');
+            } else {
+              alert('GitHub 저장소 설정이 필요합니다. 설정 버튼(⚙️)을 클릭하여 설정해주세요.');
+            }
+          }}
+          title="GitHub 저장소로 이동"
+        >
+          <svg height="16" aria-hidden="true" viewBox="0 0 24 24" version="1.1" width="16" data-view-component="true" className="octicon octicon-mark-github v-align-middle">
+            <path d="M12 1C5.923 1 1 5.923 1 12c0 4.867 3.149 8.979 7.521 10.436.55.096.756-.233.756-.522 0-.262-.013-1.128-.013-2.049-2.764.509-3.479-.674-3.699-1.292-.124-.317-.66-1.293-1.127-1.554-.385-.207-.936-.715-.014-.729.866-.014 1.485.797 1.691 1.128.99 1.663 2.571 1.196 3.204.907.096-.715.385-1.196.701-1.471-2.448-.275-5.005-1.224-5.005-5.432 0-1.196.426-2.186 1.128-2.956-.111-.275-.496-1.402.11-2.915 0 0 .921-.288 3.024 1.128a10.193 10.193 0 0 1 2.75-.371c.936 0 1.871.123 2.75.371 2.104-1.43 3.025-1.128 3.025-1.128.605 1.513.221 2.64.111 2.915.701.77 1.127 1.747 1.127 2.956 0 4.222-2.571 5.157-5.019 5.432.399.344.743 1.004.743 2.035 0 1.471-.014 2.654-.014 3.025 0 .289.206.632.756.522C19.851 20.979 23 16.854 23 12c0-6.077-4.922-11-11-11Z"></path>
+          </svg>
         </button>
 
         <button 
