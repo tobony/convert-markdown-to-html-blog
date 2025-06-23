@@ -9,7 +9,7 @@ export interface GitHubSettings {
 }
 
 const DEFAULT_SETTINGS: GitHubSettings = {
-  enabled: false,
+  enabled: true, // 기본적으로 GitHub 연동 활성화
   token: '',
   owner: '',
   repo: '',
@@ -20,23 +20,28 @@ const STORAGE_KEY = 'github-config';
 
 export const useGitHubConfig = () => {
   const [settings, setSettings] = useState<GitHubSettings>(DEFAULT_SETTINGS);
-
   // localStorage에서 설정 로드
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        setSettings({ ...DEFAULT_SETTINGS, ...parsed });
+        const mergedSettings = { ...DEFAULT_SETTINGS, ...parsed };
+        console.log('GitHub 설정 로드됨:', mergedSettings);
+        setSettings(mergedSettings);
+      } else {
+        console.log('GitHub 설정 없음, 기본값 사용:', DEFAULT_SETTINGS);
+        setSettings(DEFAULT_SETTINGS);
       }
     } catch (error) {
       console.error('Failed to load GitHub config:', error);
+      setSettings(DEFAULT_SETTINGS);
     }
   }, []);
-
   // 설정 저장
   const saveSettings = (newSettings: GitHubSettings) => {
     try {
+      console.log('GitHub 설정 저장:', newSettings);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(newSettings));
       setSettings(newSettings);
     } catch (error) {

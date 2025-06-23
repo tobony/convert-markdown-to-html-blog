@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useGitHubConfig } from '../hooks/use-github-config';
 
 interface GitHubConfigDialogProps {
@@ -16,6 +16,19 @@ const GitHubConfigDialog: React.FC<GitHubConfigDialogProps> = ({ isOpen, onClose
     repo: settings.repo,
     branch: settings.branch,
   });
+
+  // 다이얼로그가 열릴 때마다 최신 설정으로 formData 동기화
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({
+        enabled: settings.enabled,
+        token: settings.token,
+        owner: settings.owner,
+        repo: settings.repo,
+        branch: settings.branch,
+      });
+    }
+  }, [isOpen, settings]);
 
   const handleSave = () => {
     saveSettings(formData);
@@ -129,10 +142,9 @@ const GitHubConfigDialog: React.FC<GitHubConfigDialogProps> = ({ isOpen, onClose
           <h2>GitHub 저장소 설정</h2>
           <button className="github-config-close" onClick={handleCancel}>×</button>
         </div>
-        
-        <div className="github-config-content">
-          <div className="github-config-field">
-            <label>
+          <div className="github-config-content">
+          <div className="github-config-field github-config-header-row">
+            <label className="github-config-enable-label">
               <input
                 type="checkbox"
                 checked={formData.enabled}
@@ -140,6 +152,14 @@ const GitHubConfigDialog: React.FC<GitHubConfigDialogProps> = ({ isOpen, onClose
               />
               GitHub 연동 활성화
             </label>
+            <div className="github-config-header-buttons">
+              <button className="github-config-btn-cancel" onClick={handleCancel}>
+                취소
+              </button>
+              <button className="github-config-btn-save" onClick={handleSave}>
+                저장
+              </button>
+            </div>
           </div>
 
           {formData.enabled && (
@@ -202,8 +222,9 @@ const GitHubConfigDialog: React.FC<GitHubConfigDialogProps> = ({ isOpen, onClose
                 </ol>
               </div>
             </>
-          )}
-        </div>        <div className="github-config-footer">
+          )}        </div>
+        
+        <div className="github-config-footer">
           <div className="github-config-backup-actions">
             <button 
               className="github-config-btn-backup" 
@@ -218,14 +239,6 @@ const GitHubConfigDialog: React.FC<GitHubConfigDialogProps> = ({ isOpen, onClose
               type="button"
             >
               📂 설정 가져오기
-            </button>
-          </div>
-          <div className="github-config-main-actions">
-            <button className="github-config-btn-cancel" onClick={handleCancel}>
-              취소
-            </button>
-            <button className="github-config-btn-save" onClick={handleSave}>
-              저장
             </button>
           </div>
         </div>
