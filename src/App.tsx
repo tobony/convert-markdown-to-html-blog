@@ -746,7 +746,7 @@ function App() {  const [markdown, setMarkdown] = useState("");
               }
             }}
           />
-          CustomStyle1
+          Style1
         </label>
         <label className="checkbox-label">
           <input
@@ -759,7 +759,7 @@ function App() {  const [markdown, setMarkdown] = useState("");
               }
             }}
           />
-          CustomStyle2
+          Style2
         </label>
       </div>
 
