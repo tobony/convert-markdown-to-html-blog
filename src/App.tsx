@@ -500,7 +500,7 @@ function App() {  const [markdown, setMarkdown] = useState("");
     } finally {
       setIsUploading(false);
     }
-  };const handleFunction2 = async () => {
+  };  const handleFunction2 = async () => {
     try {
       if (tab === 'html_output') {
         // HTML Output 탭: 렌더링된 서식 포함 텍스트 복사
@@ -617,6 +617,40 @@ function App() {  const [markdown, setMarkdown] = useState("");
         setIsCopied(false);
       }, 1000);
     }
+  };
+
+  // 마크다운 다운로드 핸들러
+  const downloadMarkdown = () => {
+    if (!markdown.trim()) {
+      alert('다운로드할 마크다운 내용이 없습니다.');
+      return;
+    }
+
+    try {
+      const fileName = generateFileName();
+      
+      // Blob 생성
+      const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
+      
+      // 다운로드 링크 생성
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      
+      // 다운로드 실행
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // URL 메모리 해제
+      URL.revokeObjectURL(url);
+      
+      console.log(`마크다운 다운로드 완료: ${fileName}`);
+    } catch (error) {
+      console.error('마크다운 다운로드 실패:', error);
+      alert('다운로드 중 오류가 발생했습니다.');
+    }
   };return (
     <main className="split-container">      <div className="function-bar">        <button 
           type="button" 
@@ -630,13 +664,23 @@ function App() {  const [markdown, setMarkdown] = useState("");
           onClick={handleFunction2}
         >
           {isCopied ? '복사완료' : '결과복사'}
-        </button>        <button 
+        </button>
+
+        <button 
+          type="button" 
+          className="function-btn"
+          onClick={downloadMarkdown}
+        >
+          md다운로드
+        </button>
+
+        <button 
           type="button" 
           className={`function-btn ${isUploading ? 'uploading' : ''}`}
           onClick={handleFunction3}
           disabled={isUploading}
         >
-          {isUploading ? '업로드중...' : 'repo 파일추가'}
+          {isUploading ? '업로드중...' : 'md repo추가'}
         </button>
 
         <button 
