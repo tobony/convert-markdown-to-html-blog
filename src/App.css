@@ -649,7 +649,7 @@ textarea.markdown-input, textarea.html-output {
 }
 
 .checkbox-label input[type="checkbox"] {
-  margin-right: 6px;
+  margin-right: 4px; /* 6px에서 4px로 축소 */
   cursor: pointer;
   transform: scale(1.0); /* 기본 크기로 복원 */
   width: 16px;
@@ -673,24 +673,23 @@ textarea.markdown-input, textarea.html-output {
     padding: 0;
     height: 100vh;
   }  
-    /* 기능 버튼 바 모바일 최적화 */
+  /* 기능 버튼 바 모바일 최적화 */
   .function-bar {
-    padding: 0.5rem 0.75rem;
-    gap: 0.5rem;
-    min-height: 48px; /* iOS 권장 터치 타겟 크기 */
+    padding: 0.3rem 0.5rem; /* 패딩 축소 */
+    gap: 0.3rem; /* 간격 축소 */
+    min-height: 40px; /* 48px에서 40px로 축소 */
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center; /* 버튼과 체크박스가 수평 정렬되도록 */
     max-width: 100%;
     overflow: visible;
   }
-
   .function-btn {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.9rem;
-    min-height: 44px; /* iOS 권장 터치 타겟 크기 */
-    height: 44px;
-    min-width: 44px;
+    padding: 0.3rem 0.5rem; /* 패딩 축소 */
+    font-size: 0.85rem;
+    min-height: 36px; /* 44px에서 36px로 축소 */
+    height: 36px;
+    min-width: 36px; /* 최소 너비도 축소 */
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     touch-action: manipulation; /* 터치 최적화 */
@@ -700,27 +699,27 @@ textarea.markdown-input, textarea.html-output {
 
   /* 아이콘 버튼의 SVG 크기 모바일 최적화 */
   .function-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 16px; /* 18px에서 16px로 축소 */
+    height: 16px;
     flex-shrink: 0;
   }
 
   .checkbox-label {
-    font-size: 0.9rem;
-    margin-left: 0.5rem;
-    padding: 0.5rem 0.75rem; /* 터치 영역 확대 */
+    font-size: 0.85rem; /* 폰트 크기 축소 */
+    margin-left: 0.3rem; /* 마진 축소 */
+    padding: 0.3rem 0.5rem; /* 패딩 축소 */
     touch-action: manipulation;
-    min-height: 44px; /* iOS 권장 터치 타겟 크기 */
-    border-radius: 6px;
+    min-height: 36px; /* 44px에서 36px로 축소 */
+    border-radius: 4px; /* 라운드 축소 */
     flex-shrink: 0; /* 체크박스가 압축되지 않도록 */
     white-space: nowrap; /* 텍스트 줄바꿈 방지 */
   }
 
   .checkbox-label input[type="checkbox"] {
-    transform: scale(1.3); /* 모바일에서 체크박스 크기 확대 */
-    margin-right: 8px;
-    width: 18px;
-    height: 18px;
+    transform: scale(1.2); /* 1.3에서 1.2로 축소 */
+    margin-right: 4px; /* 8px에서 4px로 축소 */
+    width: 16px; /* 18px에서 16px로 축소 */
+    height: 16px;
   }
 
   /* Split panes 세로 배치 */
@@ -762,17 +761,17 @@ textarea.markdown-input, textarea.html-output {
   .tab-bar {
     margin-bottom: 8px;
   }
-
   /* 체크박스 컨테이너 모바일 최적화 */
   .checkbox-container {
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 0.3rem; /* 0.5rem에서 0.3rem로 축소 */
     padding-right: 0;
+    margin-bottom: 0.3rem; /* 아래 마진 축소 */
   }
 
   .checkbox-container.margin-left-auto {
     margin-left: 0;
-    margin-top: 0.5rem;
+    margin-top: 0.3rem; /* 0.5rem에서 0.3rem로 축소 */
   }
 
   /* 입력 영역 모바일 최적화 */
@@ -835,52 +834,53 @@ textarea.markdown-input, textarea.html-output {
 /* 더 작은 모바일 화면 (480px 이하) */
 @media (max-width: 480px) {
   .function-bar {
-    padding: 0.4rem 0.5rem;
-    gap: 0.3rem;
-    min-height: 36px;
-  }
-  .function-btn {
-    padding: 0.4rem 0.6rem;
-    font-size: 0.85rem;
-    min-height: 36px;
-    height: 36px; /* 작은 모바일에서도 명시적 높이 지정 */
-    min-width: 60px;
+    padding: 0.25rem 0.3rem; /* 패딩 더 축소 */
+    gap: 0.2rem; /* 간격 더 축소 */
+    min-height: 34px; /* 36px에서 34px로 축소 */
+  }.function-btn {
+    padding: 0.25rem 0.4rem; /* 패딩 더 축소 */
+    font-size: 0.8rem;
+    min-height: 32px; /* 36px에서 32px로 축소 */
+    height: 32px;
+    min-width: 50px; /* 최소 너비 축소 */
     flex-shrink: 0; /* 버튼이 압축되지 않도록 */
     white-space: nowrap; /* 텍스트 줄바꿈 방지 */
   }
 
   /* 아이콘 버튼의 SVG 크기 조정 */
   .function-btn svg {
-    width: 16px;
-    height: 16px;
+    width: 14px; /* 16px에서 14px로 축소 */
+    height: 14px;
   }
 
   .tab-btn {
     padding: 6px 12px;
-    font-size: 0.9rem;
-    min-height: 36px;
+    font-size: 0.85rem; /* 0.9rem에서 축소 */
+    min-height: 32px; /* 36px에서 32px로 축소 */
   }
 
   .split-pane {
     padding: 8px;
     min-height: 250px;
   }
+  
   .markdown-input, .html-output {
     padding: 8px;
     font-size: 0.9rem;
   }
 
   .checkbox-label {
-    font-size: 0.85rem;
-    padding: 0.3rem 0.5rem; /* 작은 모바일에서 패딩 축소 */
-    min-height: 36px; /* 작은 모바일에서 최소 터치 영역 축소 */
+    font-size: 0.8rem; /* 0.85rem에서 축소 */
+    padding: 0.25rem 0.4rem; /* 패딩 더 축소 */
+    min-height: 32px; /* 36px에서 32px로 축소 */
+    margin-left: 0.2rem; /* 마진 축소 */
   }
 
   .checkbox-label input[type="checkbox"] {
-    transform: scale(1.2); /* 작은 모바일에서 체크박스 크기 조정 */
-    margin-right: 6px;
-    width: 16px;
-    height: 16px;
+    transform: scale(1.1); /* 1.2에서 1.1로 축소 */
+    margin-right: 3px; /* 6px에서 3px로 축소 */
+    width: 14px; /* 16px에서 14px로 축소 */
+    height: 14px;
   }
 
   .html-output h1 {
