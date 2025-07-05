@@ -423,21 +423,44 @@ function App() {  const [markdown, setMarkdown] = useState("");
     const datePrefix = `${year}${month}${day}`; // 250622
     
     // 마크다운에서 첫 번째 h1 헤더 추출
-    const h1Match = markdown.match(/^#\s+(.+)$/m);
+    let h1Match = markdown.match(/^#\s+(.+)$/m);
     let title = 'document';
+    let headerSource = 'default';
     
     if (h1Match && h1Match[1]) {
-      // h1 제목을 20자까지 제한하고 파일명에 적합하게 정리
-      title = h1Match[1]
-        .trim()
-        .slice(0, 20) // 20자까지 제한
+      // H1 헤더가 있는 경우
+      title = h1Match[1].trim();
+      headerSource = 'h1';
+    } else {
+      // H1이 없으면 H2 헤더 검색
+      const h2Match = markdown.match(/^##\s+(.+)$/m);
+      if (h2Match && h2Match[1]) {
+        title = h2Match[1].trim();
+        headerSource = 'h2';
+      }
+    }
+    
+    // 제목이 기본값이 아닌 경우 파일명에 적합하게 정리
+    if (title !== 'document') {
+      title = title
+        .slice(0, 35) // 35자까지 제한 (기존 20자에서 확장)
         .replace(/[<>:"/\\|?*]/g, '') // 파일명에 사용할 수 없는 특수문자 제거
         .replace(/\s+/g, '_') // 공백을 언더스코어로 변경
         .replace(/[^\w가-힣]/g, '') // 영문, 숫자, 한글, 언더스코어만 허용
         || 'document'; // 빈 문자열인 경우 기본값 사용
     }
     
-    return `${datePrefix}_${title}.md`;
+    const fileName = `${datePrefix}_${title}.md`;
+    
+    // 디버깅 로그 추가
+    console.log(`파일명 생성:`, {
+      headerSource,
+      originalTitle: h1Match?.[1] || (markdown.match(/^##\s+(.+)$/m)?.[1]) || 'none',
+      processedTitle: title,
+      fileName
+    });
+    
+    return fileName;
   };
 
   // 기능 버튼 핸들러들
@@ -652,13 +675,16 @@ function App() {  const [markdown, setMarkdown] = useState("");
       alert('다운로드 중 오류가 발생했습니다.');
     }
   };return (
-    <main className="split-container">      <div className="function-bar">        <button 
+    <main className="split-container">      
+      <div className="function-bar">        
+        <button 
           type="button" 
           className="function-btn"
           onClick={handleFunction1}
         >
           Delete
-        </button>        <button 
+        </button>
+        <button 
           type="button" 
           className={`function-btn ${isCopied ? 'copied' : ''}`}
           onClick={handleFunction2}
@@ -672,14 +698,37 @@ function App() {  const [markdown, setMarkdown] = useState("");
           onClick={downloadMarkdown}
         >
           md다운로드
-        </button>        <button 
+        </button>
+        <button 
           type="button" 
           className={`function-btn ${isUploading ? 'uploading' : ''}`}
           onClick={handleFunction3}
           disabled={isUploading}
         >
-          {isUploading ? '업로드중...' : 'md repo추가'}
-        </button>        <button 
+          {isUploading ? '업로드중...' : 'mdRepo추가'}
+        </button>
+
+
+        <button 
+          type="button" 
+          className="function-btn"
+          onClick={() => {
+            const config = getConfig();
+            if (config && config.owner && config.repo) {
+              const repoUrl = `https://github.com/${config.owner}/${config.repo}`;
+              window.open(repoUrl, '_blank');
+            } else {
+              alert('GitHub 저장소 설정이 필요합니다. 설정 버튼(⚙️)을 클릭하여 설정해주세요.');
+            }
+          }}
+          title="GitHub 저장소로 이동"
+        >
+          <svg height="16" aria-hidden="true" viewBox="0 0 24 24" version="1.1" width="16" data-view-component="true" className="octicon octicon-mark-github v-align-middle">
+            <path d="M12 1C5.923 1 1 5.923 1 12c0 4.867 3.149 8.979 7.521 10.436.55.096.756-.233.756-.522 0-.262-.013-1.128-.013-2.049-2.764.509-3.479-.674-3.699-1.292-.124-.317-.66-1.293-1.127-1.554-.385-.207-.936-.715-.014-.729.866-.014 1.485.797 1.691 1.128.99 1.663 2.571 1.196 3.204.907.096-.715.385-1.196.701-1.471-2.448-.275-5.005-1.224-5.005-5.432 0-1.196.426-2.186 1.128-2.956-.111-.275-.496-1.402.11-2.915 0 0 .921-.288 3.024 1.128a10.193 10.193 0 0 1 2.75-.371c.936 0 1.871.123 2.75.371 2.104-1.43 3.025-1.128 3.025-1.128.605 1.513.221 2.64.111 2.915.701.77 1.127 1.747 1.127 2.956 0 4.222-2.571 5.157-5.019 5.432.399.344.743 1.004.743 2.035 0 1.471-.014 2.654-.014 3.025 0 .289.206.632.756.522C19.851 20.979 23 16.854 23 12c0-6.077-4.922-11-11-11Z"></path>
+          </svg>
+        </button>
+
+        <button 
           type="button" 
           className="function-btn"
           onClick={() => {
@@ -706,25 +755,6 @@ function App() {  const [markdown, setMarkdown] = useState("");
             </g>
             <path d="M21.75,5.852c0,-2.195 -1.782,-3.977 -3.977,-3.977l-11.546,0c-2.195,0 -3.977,1.782 -3.977,3.977l0,11.546c0,2.195 1.782,3.977 3.977,3.977l11.546,0c2.195,0 3.977,-1.782 3.977,-3.977l0,-11.546Z" style={{fill:"#fff"}}/>
             <path d="M4.633,6.013l1.37,0l0,-1.828l1.399,0l0,1.828l1.696,0l0,-1.828l1.399,0l0,1.828l1.37,0l0,1.691l-1.37,0l0,1.902l1.37,0l0,1.69l-1.37,0l0,1.829l-1.399,0l0,-1.829l-1.696,0l0,1.829l-1.399,0l0,-1.829l-1.37,0l0,-1.69l1.37,0l0,-1.902l-1.37,0l0,-1.691Zm2.769,1.691l0,1.902l1.696,0l0,-1.902l-1.696,0Z" style={{fill:"#737373"}}/>
-          </svg>
-        </button>
-
-        <button 
-          type="button" 
-          className="function-btn"
-          onClick={() => {
-            const config = getConfig();
-            if (config && config.owner && config.repo) {
-              const repoUrl = `https://github.com/${config.owner}/${config.repo}`;
-              window.open(repoUrl, '_blank');
-            } else {
-              alert('GitHub 저장소 설정이 필요합니다. 설정 버튼(⚙️)을 클릭하여 설정해주세요.');
-            }
-          }}
-          title="GitHub 저장소로 이동"
-        >
-          <svg height="16" aria-hidden="true" viewBox="0 0 24 24" version="1.1" width="16" data-view-component="true" className="octicon octicon-mark-github v-align-middle">
-            <path d="M12 1C5.923 1 1 5.923 1 12c0 4.867 3.149 8.979 7.521 10.436.55.096.756-.233.756-.522 0-.262-.013-1.128-.013-2.049-2.764.509-3.479-.674-3.699-1.292-.124-.317-.66-1.293-1.127-1.554-.385-.207-.936-.715-.014-.729.866-.014 1.485.797 1.691 1.128.99 1.663 2.571 1.196 3.204.907.096-.715.385-1.196.701-1.471-2.448-.275-5.005-1.224-5.005-5.432 0-1.196.426-2.186 1.128-2.956-.111-.275-.496-1.402.11-2.915 0 0 .921-.288 3.024 1.128a10.193 10.193 0 0 1 2.75-.371c.936 0 1.871.123 2.75.371 2.104-1.43 3.025-1.128 3.025-1.128.605 1.513.221 2.64.111 2.915.701.77 1.127 1.747 1.127 2.956 0 4.222-2.571 5.157-5.019 5.432.399.344.743 1.004.743 2.035 0 1.471-.014 2.654-.014 3.025 0 .289.206.632.756.522C19.851 20.979 23 16.854 23 12c0-6.077-4.922-11-11-11Z"></path>
           </svg>
         </button>
 
