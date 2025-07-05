@@ -1,4 +1,6 @@
 
+# Sample - Google Firebase 활용
+
 ## Firebase Genkit과 Ollama 연동 방법
 
 **Firebase Genkit**과 **Ollama**는 플러그인 방식을 통해 쉽게 연동할 수 있습니다. Ollama는 로컬에서 다양한 오픈소스 LLM(대형 언어 모델)을 실행할 수 있는 서버이며, Genkit은 이 Ollama 서버에 직접 연결하여 AI 기능을 활용할 수 있게 해줍니다.
@@ -17,10 +19,7 @@ Citations:
 [3] https://github.com/xavidop/firebase-genkit-ollama
 [4] https://ollama.com/blog/firebase-genkit
 
-
 ---
-
-
 
 # 마크다운 샘플 파일
 
