@@ -180,7 +180,114 @@ button:active {
   opacity: 0.7;
 }
 
-/* GitHub 설정 다이얼로그 스타일 */
+/* Monaco Editor 스타일 */
+.monaco-editor-container {
+  height: 100%;
+  width: 100%;
+  min-height: 300px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.monaco-editor-container .monaco-editor {
+  height: 100% !important;
+}
+
+/* Monaco Editor 폰트 크기 강제 적용 */
+.monaco-editor-container .monaco-editor .view-lines {
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+}
+
+.monaco-editor-container .monaco-editor .view-line {
+  font-size: 16px !important;
+  line-height: 24px !important; /* 16px * 1.5 = 24px */
+}
+
+.monaco-editor-container .monaco-editor .mtk1,
+.monaco-editor-container .monaco-editor .mtk2,
+.monaco-editor-container .monaco-editor .mtk3,
+.monaco-editor-container .monaco-editor .mtk4,
+.monaco-editor-container .monaco-editor .mtk5,
+.monaco-editor-container .monaco-editor .mtk6,
+.monaco-editor-container .monaco-editor .mtk7,
+.monaco-editor-container .monaco-editor .mtk8,
+.monaco-editor-container .monaco-editor .mtk9,
+.monaco-editor-container .monaco-editor .mtk10 {
+  font-size: 16px !important;
+}
+
+.monaco-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  min-height: 300px;
+}
+
+.monaco-loading-content {
+  text-align: center;
+  color: #6b7280;
+}
+
+.monaco-loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #009879;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 12px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 다크모드 Monaco Editor */
+.dark-mode .monaco-editor-container {
+  border-color: #374151;
+}
+
+.dark-mode .monaco-loading {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+.dark-mode .monaco-loading-content {
+  color: #9ca3af;
+}
+
+.dark-mode .monaco-loading-spinner {
+  border-color: #374151;
+  border-top-color: #009879;
+}
+
+/* 모바일 Monaco Editor 최적화 */
+@media (max-width: 768px) {
+  .monaco-editor-container {
+    min-height: 250px;
+  }
+  
+  .monaco-loading {
+    min-height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .monaco-editor-container {
+    min-height: 200px;
+  }
+  
+  .monaco-loading {
+    min-height: 200px;
+  }
+}
+
 .github-config-overlay {
   position: fixed;
   top: 0;
@@ -530,6 +637,15 @@ textarea.markdown-input, textarea.html-output {
     'Apple SD Gothic Neo','D2Coding', Consolas, Monaco, 'Nanum Gothic Coding', 'Noto Sans Mono CJK KR', monospace;
   font-size: 1.0rem; /* Adjusted to match parent container font-size */
   line-height: 1.6; /* Adjusted to match .html-output pre */
+}
+
+/* HTML output div에도 동일한 폰트 적용 */
+.html-output {
+  font-family: 'Noto Sans KR',
+    'Malgun Gothic',
+    'Apple SD Gothic Neo', Arial, sans-serif;
+  font-size: 1.0rem; /* Monaco Editor와 동일한 16px */
+  line-height: 1.6;
 }
 
 

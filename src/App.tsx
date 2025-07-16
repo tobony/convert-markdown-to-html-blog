@@ -7,6 +7,7 @@ import hljs from "highlight.js/lib/core";
 import { useGitHubConfig } from "./hooks/use-github-config";
 import { githubAPI } from "./lib/github";
 import GitHubConfigDialog from "./components/GitHubConfigDialog";
+import MonacoMarkdownEditor from "./components/MonacoMarkdownEditor";
 // 일반적으로 많이 사용되는 언어만 임포트
 import javascript from "highlight.js/lib/languages/javascript";
 import typescript from "highlight.js/lib/languages/typescript";
@@ -68,7 +69,10 @@ function App() {  const [markdown, setMarkdown] = useState("");
   const [functionCheckbox1, setFunctionCheckbox1] = useState(false);
   const [functionCheckbox2, setFunctionCheckbox2] = useState(false);
   const [isCopied, setIsCopied] = useState(false); // 복사 완료 상태 관리
-  const htmlOutputRef = useRef<HTMLDivElement>(null); // Ref for the HTML output div  // GitHub 연동 관련 상태
+  const [syncScroll, setSyncScroll] = useState(true); // 동기화 스크롤 상태
+  const htmlOutputRef = useRef<HTMLDivElement>(null); // Ref for the HTML output div
+  const monacoEditorRef = useRef<any>(null); // Monaco Editor 참조
+  const isScrollSyncing = useRef(false); // 스크롤 동기화 중인지 확인하는 플래그  // GitHub 연동 관련 상태
   const { getConfig, isConfigured, saveSettings } = useGitHubConfig();
   const [isUploading, setIsUploading] = useState(false);
   const [showGitHubConfig, setShowGitHubConfig] = useState(false);
@@ -331,6 +335,53 @@ function App() {  const [markdown, setMarkdown] = useState("");
     });
 
   }, [functionCheckbox1, functionCheckbox2, markdown, removeCitations, tab]);
+
+  // 스크롤 동기화 함수
+  const handleMonacoScroll = (scrollTop: number, scrollHeight: number, clientHeight: number) => {
+    console.log('Monaco 스크롤 이벤트:', { syncScroll, scrollTop, scrollHeight, clientHeight });
+    
+    if (!syncScroll || isScrollSyncing.current || !htmlOutputRef.current) return;
+    
+    isScrollSyncing.current = true;
+    
+    // 스크롤 비율 계산
+    const scrollRatio = scrollTop / (scrollHeight - clientHeight);
+    
+    // HTML 출력 영역에 동일한 비율로 스크롤 적용
+    const htmlOutput = htmlOutputRef.current;
+    const targetScrollTop = scrollRatio * (htmlOutput.scrollHeight - htmlOutput.clientHeight);
+    
+    htmlOutput.scrollTop = targetScrollTop;
+    
+    console.log('Monaco → HTML 스크롤 동기화:', { scrollRatio, targetScrollTop });
+    
+    // 잠시 후 플래그 해제
+    setTimeout(() => {
+      isScrollSyncing.current = false;
+    }, 10);
+  };
+
+  // HTML 출력 영역 스크롤 핸들러
+  const handleHtmlScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    console.log('HTML 스크롤 이벤트:', { syncScroll });
+    
+    if (!syncScroll || isScrollSyncing.current || !monacoEditorRef.current) return;
+    
+    isScrollSyncing.current = true;
+    
+    const target = event.target as HTMLDivElement;
+    const scrollRatio = target.scrollTop / (target.scrollHeight - target.clientHeight);
+    
+    // Monaco Editor에 동일한 비율로 스크롤 적용
+    monacoEditorRef.current.setScrollTop(scrollRatio * (monacoEditorRef.current.getScrollHeight() - monacoEditorRef.current.getLayoutInfo().height));
+    
+    console.log('HTML → Monaco 스크롤 동기화:', { scrollRatio });
+    
+    // 잠시 후 플래그 해제
+    setTimeout(() => {
+      isScrollSyncing.current = false;
+    }, 10);
+  };
 
   // Load sample.md content when the component mounts
   useEffect(() => {
@@ -814,6 +865,14 @@ function App() {  const [markdown, setMarkdown] = useState("");
             <label className="checkbox-label">
               <input
                 type="checkbox"
+                checked={syncScroll}
+                onChange={() => setSyncScroll(!syncScroll)}
+              />
+              Sync Scroll
+            </label>
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
                 checked={removeCitations}
                 onChange={() => setRemoveCitations(!removeCitations)}
               />
@@ -835,11 +894,13 @@ function App() {  const [markdown, setMarkdown] = useState("");
             )}
           </div>
           {leftTab === "markdown" ? (
-            <textarea
-              className="markdown-input"
+            <MonacoMarkdownEditor
               value={markdown}
-              onChange={e => setMarkdown(e.target.value)}
-              placeholder="여기에 마크다운을 입력하세요..."
+              onChange={setMarkdown}
+              onScroll={handleMonacoScroll}
+              onEditorReady={(editor) => {
+                monacoEditorRef.current = editor;
+              }}
             />
           ) : (
             <textarea
@@ -895,6 +956,7 @@ function App() {  const [markdown, setMarkdown] = useState("");
               dangerouslySetInnerHTML={{ __html: html }}
               tabIndex={0} // Make the div focusable
               onKeyDown={handleHtmlOutputKeyDown} // Handle key down for Ctrl+A
+              onScroll={handleHtmlScroll} // 스크롤 동기화 이벤트 추가
             />          ) : (
             <textarea
               className="html-output html-output-textarea"
