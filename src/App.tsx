@@ -526,66 +526,63 @@ function App() {  const [markdown, setMarkdown] = useState("");
   };  const handleFunction2 = async () => {
     try {
       if (tab === 'html_output') {
-        // HTML Output 탭: 렌더링된 서식 포함 텍스트 복사
+        // HTML Output 탭: Ctrl+A + Ctrl+C 방식으로 서식 포함 복사
         if (htmlOutputRef.current) {
-          // 최신 클립보드 API 사용 (서식 포함)
-          if (navigator.clipboard && navigator.clipboard.write) {
+          console.log('HTML Output 탭: Selection API를 사용한 복사 시작');
+          
+          // 요소를 포커스하여 복사 가능한 상태로 만들기
+          htmlOutputRef.current.focus();
+          
+          // 전체 내용 선택 (Ctrl+A와 동일한 효과)
+          const selection = window.getSelection();
+          const range = document.createRange();
+          range.selectNodeContents(htmlOutputRef.current);
+          
+          if (selection) {
+            selection.removeAllRanges();
+            selection.addRange(range);
+            
+            console.log('Selection 생성 완료:', {
+              selectedText: selection.toString().substring(0, 100) + '...',
+              rangeCount: selection.rangeCount
+            });
+            
             try {
-              // HTML과 플레인 텍스트 둘 다 클립보드에 저장
-              const htmlContent = htmlOutputRef.current.innerHTML;
-              const textContent = htmlOutputRef.current.textContent || htmlOutputRef.current.innerText || '';
-              
-              const clipboardItem = new ClipboardItem({
-                'text/html': new Blob([htmlContent], { type: 'text/html' }),
-                'text/plain': new Blob([textContent], { type: 'text/plain' })
-              });
-              
-              await navigator.clipboard.write([clipboardItem]);
-              console.log('HTML Output 서식 포함 복사 완료 (최신 API)');
-            } catch (apiError) {
-              console.warn('최신 API 실패, 폴백 방법 사용:', apiError);
-              // 폴백: 전체 내용 선택 후 복사
-              const selection = window.getSelection();
-              const range = document.createRange();
-              range.selectNodeContents(htmlOutputRef.current);
-              
-              if (selection) {
-                selection.removeAllRanges();
-                selection.addRange(range);
-                
-                try {
-                  const successful = document.execCommand('copy');
-                  if (successful) {
-                    console.log('HTML Output 서식 포함 복사 완료 (폴백)');
-                  } else {
-                    throw new Error('복사 실패');
-                  }
-                } finally {
-                  selection.removeAllRanges();
-                }
+              // document.execCommand('copy')를 사용하여 복사 (Ctrl+C와 동일한 효과)
+              const successful = document.execCommand('copy');
+              if (successful) {
+                console.log('HTML Output 서식 포함 복사 완료 (Selection API)');
+              } else {
+                throw new Error('document.execCommand 복사 실패');
               }
+            } catch (copyError) {
+              console.error('Selection API 복사 실패:', copyError);
+              // 최후 폴백: 현대 API 시도
+              if (navigator.clipboard && navigator.clipboard.write) {
+                try {
+                  const htmlContent = htmlOutputRef.current.innerHTML;
+                  const textContent = htmlOutputRef.current.textContent || htmlOutputRef.current.innerText || '';
+                  
+                  const clipboardItem = new ClipboardItem({
+                    'text/html': new Blob([htmlContent], { type: 'text/html' }),
+                    'text/plain': new Blob([textContent], { type: 'text/plain' })
+                  });
+                  
+                  await navigator.clipboard.write([clipboardItem]);
+                  console.log('HTML Output 복사 완료 (Clipboard API 폴백)');
+                } catch (apiError) {
+                  console.error('모든 복사 방법 실패:', apiError);
+                  throw new Error('복사에 실패했습니다.');
+                }
+              } else {
+                throw copyError;
+              }
+            } finally {
+              // 선택 영역 해제
+              selection.removeAllRanges();
             }
           } else {
-            // 전체 내용을 선택 후 복사 (구형 브라우저)
-            const selection = window.getSelection();
-            const range = document.createRange();
-            range.selectNodeContents(htmlOutputRef.current);
-            
-            if (selection) {
-              selection.removeAllRanges();
-              selection.addRange(range);
-              
-              try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                  console.log('HTML Output 서식 포함 복사 완료 (구형 브라우저)');
-                } else {
-                  throw new Error('복사 실패');
-                }
-              } finally {
-                selection.removeAllRanges();
-              }
-            }
+            throw new Error('Selection 객체를 생성할 수 없습니다.');
           }
         }
       } else {
