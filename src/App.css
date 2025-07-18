@@ -615,6 +615,17 @@ textarea.markdown-input, textarea.html-output {
   padding: 1em 1.5em;
   display: block;
   word-wrap: break-word;
+  white-space: pre;
+  text-indent: 0;
+}
+
+.html-output pre code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  display: block;
+  white-space: pre;
+  text-indent: 0;
 }
 
 .html-output code {

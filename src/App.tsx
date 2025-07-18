@@ -41,12 +41,15 @@ import appCss from "./App.css?inline";
 marked.use(
   markedHighlight({
     highlight: (code, lang) => {
+      // 코드의 앞뒤 공백을 제거하여 첫 번째 줄 공백 문제 해결
+      const trimmedCode = code.trim();
+      
       if (lang && hljs.getLanguage(lang)) {
-        return hljs.highlight(code, { language: lang }).value;
+        return hljs.highlight(trimmedCode, { language: lang }).value;
       }
       // 언어를 지정하지 않은 경우 등록된 언어 중에서 가장 적합한 것을 선택
       // 자동 감지 기능 대신 등록된 언어만 사용
-      return hljs.highlightAuto(code, hljs.listLanguages()).value;
+      return hljs.highlightAuto(trimmedCode, hljs.listLanguages()).value;
     }
   }),
   {
