@@ -76,8 +76,8 @@ function App() {  const [markdown, setMarkdown] = useState("");
   const [userCss, setUserCss] = useState("");
   const [leftTab, setLeftTab] = useState<'markdown' | 'css'>("markdown");
   const [tab, setTab] = useState<'html_output' | 'html_code'>("html_output");
-  const [withoutStyle, setWithoutStyle] = useState(true); // 기본값을 true로 변경
-  const [bloggerCodeblock, setBloggerCodeblock] = useState(true); // 기본값을 true로 변경
+  const [withoutStyle, setWithoutStyle] = useState(false); // 기본값을 false로 변경 (스타일 포함)
+  const [bloggerCodeblock, setBloggerCodeblock] = useState(false); // 기본값을 false로 변경 (prettyprint 미적용)
   const [applyUserCss, setApplyUserCss] = useState(true); // New state for applying user CSS
   const [removeCitations, setRemoveCitations] = useState(false); // New state for removing citations
   const [toggleFunction, setToggleFunction] = useState(true); // New toggle function state - 기본 활성화
@@ -429,7 +429,7 @@ function App() {  const [markdown, setMarkdown] = useState("");
         const trimmedContent = content.trim();
         // 고유한 ID 생성 (timestamp + 카운터 사용)
         const uniqueId = `more${Date.now()}_${replaceCount}`;
-        const result = `\n\n<span id="${uniqueId}" style="cursor: pointer; color: #646cff; text-decoration: underline;" onclick="console.log('Toggle clicked!', this); var content=document.getElementById('story${uniqueId}'); console.log('Content element:', content); if(!content) {console.error('Content element not found!'); return;} console.log('Display:', content.style.display); if(content.style.display=='none' || content.style.display=='') {content.style.display='block'; this.innerText='[접기]'; console.log('Expanded')} else {content.style.display='none'; this.innerText='[펼치기]'; console.log('Collapsed')}">[펼치기]</span>\n<div id="story${uniqueId}" style="display: none">\n\n${trimmedContent}\n\n</div>\n\n`;
+        const result = `\n\n<div id="toggle${uniqueId}"><span id="${uniqueId}" style="cursor: pointer; color: #646cff; text-decoration: underline;" onclick="var content=document.getElementById('story${uniqueId}'); if(!content) return; if(content.style.display=='none' || content.style.display=='') {content.style.display='block'; this.innerText='[접기]'} else {content.style.display='none'; this.innerText='[펼치기]'}">[펼치기]</span><button onclick="navigator.clipboard.writeText(document.getElementById('toggle${uniqueId}').outerHTML).then(() => {this.textContent='복사됨!'; setTimeout(() => this.textContent='Copy', 1000);}).catch(err => {})" style="margin-left: 8px; padding: 4px 8px; background: transparent; border: none; cursor: pointer; font-size: 12px; color: #646cff; font-weight: bold;" title="HTML 코드 복사">Copy</button>\n<div id="story${uniqueId}" style="display: none">\n\n${trimmedContent}\n\n</div></div>\n\n`;
         
         console.log('🔄 변환 결과 길이:', result.length);
         return result;
@@ -1025,7 +1025,7 @@ function App() {  const [markdown, setMarkdown] = useState("");
             <div
               ref={htmlOutputRef}
               className="html-output"
-              dangerouslySetInnerHTML={{ __html: html }}
+              dangerouslySetInnerHTML={{ __html: bloggerHtml }}
               tabIndex={0} // Make the div focusable
               onKeyDown={handleHtmlOutputKeyDown} // Handle key down for Ctrl+A
             />          ) : (
