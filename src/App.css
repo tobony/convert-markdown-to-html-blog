@@ -652,9 +652,29 @@ textarea.markdown-input, textarea.html-output {
   margin: 1.5em 10px;
   padding: 0.5em 10px;
   quotes: "\201C""\201D""\2018""\2019";
+  font-size: inherit; /* 기본 폰트 크기 유지 */
 }
 
 .html-output blockquote p {
+  display: inline;
+  font-size: inherit; /* 기본 폰트 크기 유지 */
+}
+
+/* 중첩된 blockquote의 폰트 크기 일관성 유지 */
+.html-output blockquote blockquote {
+  font-size: inherit; /* 상위 요소와 동일한 폰트 크기 */
+  margin: 0.5em 0; /* 중첩 시 여백 조정 */
+}
+
+.html-output blockquote blockquote blockquote {
+  font-size: inherit; /* 3단계 중첩에서도 동일한 폰트 크기 */
+  margin: 0.25em 0; /* 더 깊은 중첩에서는 여백 더 줄임 */
+}
+
+/* 중첩된 blockquote 내 모든 요소의 폰트 크기 명시적 제어 */
+.html-output blockquote blockquote p,
+.html-output blockquote blockquote blockquote p {
+  font-size: inherit;
   display: inline;
 }
 
@@ -1040,6 +1060,21 @@ textarea.markdown-input, textarea.html-output {
   .html-output blockquote {
     background: #333;
     border-left-color: #666;
+    font-size: inherit; /* 기본 폰트 크기 유지 */
+  }
+
+  /* 다크 모드에서도 중첩된 blockquote 폰트 크기 일관성 유지 */
+  .html-output blockquote blockquote {
+    font-size: inherit;
+  }
+
+  .html-output blockquote blockquote blockquote {
+    font-size: inherit;
+  }
+
+  .html-output blockquote blockquote p,
+  .html-output blockquote blockquote blockquote p {
+    font-size: inherit;
   }
 
   .html-output table {
