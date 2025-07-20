@@ -6,7 +6,7 @@
 **Firebase Genkit**과 **Ollama**는 플러그인 방식을 통해 쉽게 연동할 수 있습니다. Ollama는 로컬에서 다양한 오픈소스 LLM(대형 언어 모델)을 실행할 수 있는 서버이며, Genkit은 이 Ollama 서버에 직접 연결하여 AI 기능을 활용할 수 있게 해줍니다.
 
 
-6. **Genkit 개발자 UI 및 워크플로우 테스트**
+1. **Genkit 개발자 UI 및 워크플로우 테스트**
    - `genkit start` 명령어로 Genkit UI를 실행하고, 브라우저에서 워크플로우를 테스트할 수 있습니다.
    - 기본 주소: `http://localhost:4000`
      [1][3][5]

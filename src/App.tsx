@@ -1000,7 +1000,7 @@ ${combinedContent}
               }
             }}
           />
-          Style1
+          Sty1
         </label>
         <label className="checkbox-label">
           <input
@@ -1013,7 +1013,7 @@ ${combinedContent}
               }
             }}
           />
-          Style2
+          Sty2
         </label>
         <label className="checkbox-label">
           <input
@@ -1021,7 +1021,7 @@ ${combinedContent}
             checked={toggleFunction}
             onChange={() => setToggleFunction(!toggleFunction)}
           />
-          Toggle More
+          Toggle
         </label>
       </div>
 

@@ -735,8 +735,8 @@ textarea.markdown-input, textarea.html-output {
 .checkbox-label {
   display: flex;
   align-items: center;
-  margin-left: 8px;
-  font-size: 0.95rem;
+  margin-left: 0px;
+  font-size: 0.85rem;    /* 기능 버튼과 동일한 폰트 크기 */
   color: #666;
   cursor: pointer;
   -webkit-user-select: none; /* Safari 호환성 추가 */
@@ -782,7 +782,7 @@ textarea.markdown-input, textarea.html-output {
     padding: 0.3rem 0.5rem; /* 패딩 축소 */
     gap: 0.3rem; /* 간격 축소 */
     min-height: 40px; /* 48px에서 40px로 축소 */
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* 필요시 버튼이 다음 줄로 이동 */
     justify-content: flex-start;
     align-items: center; /* 버튼과 체크박스가 수평 정렬되도록 */
     max-width: 100%;
@@ -809,14 +809,9 @@ textarea.markdown-input, textarea.html-output {
   }
 
   .checkbox-label {
-    font-size: 0.85rem; /* 폰트 크기 축소 */
-    margin-left: 0.3rem; /* 마진 축소 */
-    padding: 0.3rem 0.5rem; /* 패딩 축소 */
-    touch-action: manipulation;
-    min-height: 36px; /* 44px에서 36px로 축소 */
-    border-radius: 4px; /* 라운드 축소 */
-    flex-shrink: 0; /* 체크박스가 압축되지 않도록 */
-    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    min-height: 28px;        /* 컴팩트한 세로 높이 */
+    padding: 0.2rem 0.4rem;  /* 세로 패딩 축소 */
+    line-height: 1.2;        /* 라인 높이 조정 */
   }
 
   .checkbox-label input[type="checkbox"] {
@@ -837,7 +832,7 @@ textarea.markdown-input, textarea.html-output {
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     padding: 12px;
-    min-height: 300px;
+    min-height: 500px; /* 모바일 세로 높이 500px로 확대 */
     flex: 1;
   }
 
@@ -868,7 +863,7 @@ textarea.markdown-input, textarea.html-output {
   /* 체크박스 컨테이너 모바일 최적화 */
   .checkbox-container {
     flex-wrap: wrap;
-    gap: 0.3rem; /* 0.5rem에서 0.3rem로 축소 */
+    gap: 0.2rem 0.5rem; /* row-gap 0.2rem (vertical), column-gap 0.5rem (horizontal) */
     padding-right: 0;
     margin-bottom: 0.3rem; /* 아래 마진 축소 */
   }
@@ -934,7 +929,7 @@ textarea.markdown-input, textarea.html-output {
 
   .split-pane {
     padding: 8px;
-    min-height: 250px;
+    min-height: 500px; /* 작은 화면에서도 동일하게 적용 */
   }
   
   .markdown-input, .html-output {
@@ -943,10 +938,9 @@ textarea.markdown-input, textarea.html-output {
   }
 
   .checkbox-label {
-    font-size: 0.8rem; /* 0.85rem에서 축소 */
-    padding: 0.25rem 0.4rem; /* 패딩 더 축소 */
-    min-height: 32px; /* 36px에서 32px로 축소 */
-    margin-left: 0.2rem; /* 마진 축소 */
+    min-height: 24px;         /* 더욱 컴팩트한 세로 높이 */
+    padding: 0.15rem 0.3rem;   /* 패딩 추가 축소 */
+    line-height: 1.2;          /* 일관된 라인 높이 */
   }
 
   .checkbox-label input[type="checkbox"] {
@@ -1268,6 +1262,1371 @@ textarea.markdown-input, textarea.html-output {
 
     .split-pane {
       padding: 8px;
+      min-height: 500px; /* 작은 화면에서도 동일하게 적용 */
+    }
+
+    .markdown-input, .html-output {
+      padding: 8px;
+      font-size: 0.9rem;
+    }    .checkbox-label {
+      font-size: 0.85rem;
+    }
+  }
+
+  /* GitHub 설정 다이얼로그 다크모드 */
+  .github-config-dialog {
+    background: #333;
+    color: #eee;
+  }
+
+  .github-config-header {
+    border-bottom-color: #444;
+  }
+
+  .github-config-header h2 {
+    color: #eee;
+  }
+
+  .github-config-close {
+    color: #aaa;
+  }
+
+  .github-config-close:hover {
+    background: #444;
+    color: #eee;
+  }
+
+  .github-config-field label {
+    color: #eee;
+  }
+
+  .github-config-field input[type="text"],
+  .github-config-field input[type="password"] {
+    background: #2a2a2a;
+    border-color: #555;
+    color: #eee;
+  }
+
+  .github-config-field input[type="text"]:focus,
+  .github-config-field input[type="password"]:focus {
+    border-color: #009879;
+    box-shadow: 0 0 0 3px rgba(0, 152, 121, 0.2);
+  }
+
+  .github-config-field small {
+    color: #aaa;
+  }
+
+  .github-config-guide {
+    background: #2a2a2a;
+    border-color: #444;
+  }
+
+  .github-config-guide h4 {
+    color: #eee;
+  }
+
+  .github-config-guide ol {
+    color: #aaa;
+  }
+
+  .github-config-footer {
+    border-top-color: #444;
+  }
+
+  .github-config-btn-cancel {
+    background: #444;
+    color: #eee;
+    border-color: #555;
+  }
+
+  .github-config-btn-cancel:hover {
+    background: #555;
+  }
+
+  .github-config-btn-save {
+    background: #009879;
+    color: white;
+    border-color: #009879;
+  }
+  .github-config-btn-save:hover {
+    background: #007a61;
+  }
+
+  .github-config-btn-backup,
+  .github-config-btn-restore {
+    background: #6366f1;
+    color: white;
+    border-color: #6366f1;
+  }
+
+  .github-config-btn-backup:hover,
+  .github-config-btn-restore:hover {
+    background: #4f46e5;
+    border-color: #4f46e5;
+  }
+}
+
+/* Toggle More/Less 기능을 위한 CSS */
+.toggle-container {
+  margin: 10px 0;
+  display: block;
+}
+
+.collapsed {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  transition: max-height 0.4s ease !important;
+  opacity: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.expanded {
+  max-height: 2000px !important;
+  overflow: visible !important;
+  transition: max-height 0.4s ease !important;
+  opacity: 1 !important;
+  margin: inherit !important;
+  padding: inherit !important;
+}
+
+.toggle-btn {
+  background: #009879 !important;
+  color: white !important;
+  border: none !important;
+  padding: 6px 14px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  margin: 10px 0 !important;
+  font-size: 14px !important;
+  height: 28px !important;
+  min-width: 80px !important;
+  font-family: inherit !important;
+  font-weight: 500 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
+
+.toggle-btn:hover {
+  background: #007a63 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.toggle-btn:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 토글 콘텐츠 내부 요소들이 제대로 숨겨지도록 */
+.collapsed * {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.expanded * {
+  max-height: none !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+}
+
+/* 토글 콘텐츠 내의 링크 색상 보정 */
+.collapsed a {
+  color: transparent !important;
+}
+
+.expanded a {
+  color: #646cff !important;
+}
+
+.expanded a:hover {
+  color: #535bf2 !important;
+}
+
+/* 모바일 및 태블릿 대응 */
+@media (max-width: 768px) {
+  .split-container {
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    height: 100vh;
+  }  
+  /* 기능 버튼 바 모바일 최적화 */
+  .function-bar {
+    padding: 0.3rem 0.5rem; /* 패딩 축소 */
+    gap: 0.3rem; /* 간격 축소 */
+    min-height: 40px; /* 48px에서 40px로 축소 */
+    flex-wrap: wrap; /* 필요시 버튼이 다음 줄로 이동 */
+    justify-content: flex-start;
+    align-items: center; /* 버튼과 체크박스가 수평 정렬되도록 */
+    max-width: 100%;
+    overflow: visible;
+  }
+  .function-btn {
+    padding: 0.3rem 0.5rem; /* 패딩 축소 */
+    font-size: 0.85rem;
+    min-height: 36px; /* 44px에서 36px로 축소 */
+    height: 36px;
+    min-width: 36px; /* 최소 너비도 축소 */
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    touch-action: manipulation; /* 터치 최적화 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    flex-shrink: 0; /* 버튼이 압축되지 않도록 */
+  }
+
+  /* 아이콘 버튼의 SVG 크기 모바일 최적화 */
+  .function-btn svg {
+    width: 16px; /* 18px에서 16px로 축소 */
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  .checkbox-label {
+    min-height: 28px;        /* 컴팩트한 세로 높이 */
+    padding: 0.2rem 0.4rem;  /* 세로 패딩 축소 */
+    line-height: 1.2;        /* 라인 높이 조정 */
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    transform: scale(1.2); /* 1.3에서 1.2로 축소 */
+    margin-right: 4px; /* 8px에서 4px로 축소 */
+    width: 16px; /* 18px에서 16px로 축소 */
+    height: 16px;
+  }
+
+  /* Split panes 세로 배치 */
+  .split-panes {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .split-pane {
+    margin: 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    min-height: 500px; /* 모바일 세로 높이 500px로 확대 */
+    flex: 1;
+  }
+
+  .left-pane {
+    border-right: 1px solid #ccc;
+    border-bottom: none;
+    margin-bottom: 0;
+    order: 1;
+  }
+
+  .right-pane {
+    border-left: 1px solid #ccc;
+    order: 2;
+  }
+
+  /* 탭 버튼 모바일 최적화 */
+  .tab-btn {
+    padding: 8px 16px;
+    font-size: 1rem;
+    min-height: 40px;
+    touch-action: manipulation;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .tab-bar {
+    margin-bottom: 8px;
+  }
+  /* 체크박스 컨테이너 모바일 최적화 */
+  .checkbox-container {
+    flex-wrap: wrap;
+    gap: 0.3rem; /* 0.5rem에서 0.3rem로 축소 */
+    padding-right: 0;
+    margin-bottom: 0.3rem; /* 아래 마진 축소 */
+  }
+
+  .checkbox-container.margin-left-auto {
+    margin-left: 0;
+    margin-top: 0.3rem; /* 0.5rem에서 0.3rem로 축소 */
+  }
+
+  /* 입력 영역 모바일 최적화 */
+  .markdown-input, .html-output {
+    font-size: 1rem;
+    padding: 12px;
+    border-radius: 8px;
+    min-height: 200px;
+  }
+
+  /* GitHub 설정 다이얼로그 768px 최적화 */
+  .github-config-header-row {
+    flex-direction: row;
+    padding: 0.6rem;
+  }
+
+  .github-config-header-buttons {
+    gap: 0.5rem;
+  }
+
+  .github-config-header-buttons .github-config-btn-cancel,
+  .github-config-header-buttons .github-config-btn-save {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.875rem;
+    min-height: 36px;
+  }
+}
+
+/* 더 작은 모바일 화면 (480px 이하) */
+@media (max-width: 480px) {
+  .function-bar {
+    padding: 0.25rem 0.3rem; /* 패딩 더 축소 */
+    gap: 0.2rem; /* 간격 더 축소 */
+    min-height: 34px; /* 36px에서 34px로 축소 */
+  }.function-btn {
+    padding: 0.25rem 0.4rem; /* 패딩 더 축소 */
+    font-size: 0.8rem;
+    min-height: 32px; /* 36px에서 32px로 축소 */
+    height: 32px;
+    min-width: 50px; /* 최소 너비 축소 */
+    flex-shrink: 0; /* 버튼이 압축되지 않도록 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  }
+
+  /* 아이콘 버튼의 SVG 크기 조정 */
+  .function-btn svg {
+    width: 14px; /* 16px에서 14px로 축소 */
+    height: 14px;
+  }
+
+  .tab-btn {
+    padding: 6px 12px;
+    font-size: 0.85rem; /* 0.9rem에서 축소 */
+    min-height: 32px; /* 36px에서 32px로 축소 */
+  }
+
+  .split-pane {
+    padding: 8px;
+    min-height: 500px; /* 작은 화면에서도 동일하게 적용 */
+  }
+  
+  .markdown-input, .html-output {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .checkbox-label {
+    min-height: 24px;         /* 더욱 컴팩트한 세로 높이 */
+    padding: 0.15rem 0.3rem;   /* 패딩 추가 축소 */
+    line-height: 1.2;          /* 일관된 라인 높이 */
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    transform: scale(1.1); /* 1.2에서 1.1로 축소 */
+    margin-right: 3px; /* 6px에서 3px로 축소 */
+    width: 14px; /* 16px에서 14px로 축소 */
+    height: 14px;
+  }
+
+  /* GitHub 설정 다이얼로그 모바일 최적화 */
+  .github-config-header-row {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+    padding: 0.5rem;
+  }
+
+  .github-config-enable-label {
+    justify-content: center;
+  }
+
+  .github-config-header-buttons {
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .github-config-header-buttons .github-config-btn-cancel,
+  .github-config-header-buttons .github-config-btn-save {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    min-height: 40px;
+  }
+}
+
+
+/* ************* */
+/* ************* */
+/* 다크모드 대응 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #f6f6f6;
+    background-color: #2f2f2f;
+  }
+
+  a:hover {
+    color: #24c8db;
+  }
+
+  input,
+  button {
+    color: #ffffff;
+    background-color: #0f0f0f98;
+  }
+  
+  button:active {
+    background-color: #0f0f0f69;
+  }
+
+  .split-container {
+    background: #222;
+  }
+  
+  .split-pane {
+    background: #333;
+    border-color: #444;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+
+  .tab-bar {
+    border-bottom: 1px solid #444;
+  }
+  
+  .tab-btn {
+    color: #aaa;
+    background: none;
+  }
+    .tab-btn:hover {
+    color: #00b896;
+    background: #2a2a2a;
+  }
+  
+  .tab-btn.active-tab {
+    color: #fff;
+    background: #222;
+    border-bottom: 2px solid #00b896;
+  }
+  
+  .markdown-input, .html-output {
+    background: #2a2a2a;
+    border-color: #555;
+    color: #eee;
+  }
+  
+  textarea.markdown-input, textarea.html-output {
+    font-family: 'D2Coding', Consolas, Monaco, 'Nanum Gothic Coding', 'Noto Sans Mono CJK KR', monospace;
+    font-size: 1.0rem;
+    line-height: 1.6;
+  }
+  .html-output pre {
+    background-color: #2a2a2a;
+    border-color: #444;
+    border-left-color: #009879;
+    color: #ccc;
+  }
+
+  .html-output code {
+    background-color: #2a2a2a;
+    color: #ccc;
+  }
+
+  .html-output blockquote {
+    background: #333;
+    border-left-color: #666;
+    font-size: inherit; /* 기본 폰트 크기 유지 */
+  }
+
+  /* 다크 모드에서도 중첩된 blockquote 폰트 크기 일관성 유지 */
+  .html-output blockquote blockquote {
+    font-size: inherit;
+  }
+
+  .html-output blockquote blockquote blockquote {
+    font-size: inherit;
+  }
+
+  .html-output blockquote blockquote p,
+  .html-output blockquote blockquote blockquote p {
+    font-size: inherit;
+  }
+
+  .html-output table {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .html-output thead tr {
+    background-color: #005a48;
+  }
+
+  .html-output th,
+  .html-output td {
+    border-color: #444;
+  }
+
+  .html-output tbody tr {
+    border-bottom-color: #444;
+  }
+
+  .html-output tbody tr:nth-of-type(even) {
+    background-color: #3a3a3a;
+  }
+
+  .html-output tbody tr:last-of-type {
+    border-bottom-color: #005a48;
+  }
+
+  .checkbox-label {
+    color: #aaa;
+  }
+  .checkbox-label:hover {
+    color: #00b896;
+  }
+  /* 다크모드 기능 버튼 스타일링 */
+  .function-bar {
+    background: #333;
+    border-bottom-color: #444;
+    min-height: 22px;
+    padding: 0.2rem 0.4rem;
+    gap: 0.25rem;
+    margin-bottom: 4px;
+  }
+  .function-btn {
+    background: #009879;
+    color: #fff;
+    min-height: 32px; /* 다크모드에서도 높이 통일 */
+    height: 32px; /* 명시적 높이 지정 */
+    padding: 0.2rem 0.4rem;
+    font-size: 0.95rem;
+  }
+  .function-btn:hover {
+    background: #007a61;
+  }
+
+  .function-btn:active {
+    background: #005a48;
+  }
+  .function-btn.copied {
+    background: #003d30;
+    color: white;
+  }
+
+  .function-btn.copied:hover {
+    background: #003d30;
+  }
+
+  .function-btn.uploading {
+    background: #6b7280;
+    color: white;
+    cursor: not-allowed;
+  }
+
+  .function-btn.uploading:hover {
+    background: #6b7280;
+  }
+
+  .function-btn:disabled {
+    background: #6b7280;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  /* 다크모드 모바일 최적화 */
+  @media (max-width: 768px) {    .function-bar {
+      background: #333;
+      border-bottom-color: #444;
+      padding: 0.5rem 0.75rem;
+      gap: 0.4rem;
+      min-height: 44px; /* iOS 권장 터치 타겟 크기 */
+      flex-wrap: wrap;
+      align-items: stretch;
+    }    .function-btn {
+      background: #009879;
+      color: #fff;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
+      min-height: 44px; /* iOS 권장 터치 타겟 크기 */
+      height: 44px; /* 다크모드 모바일에서도 명시적 높이 지정 */
+      min-width: 44px; /* 아이콘 버튼을 위한 최소 너비 */
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .function-btn:hover {
+      background: #007a61;
+    }
+
+    .function-btn:active {
+      background: #005a48;
+    }
+
+    .function-btn.copied {
+      background: #003d30;
+    }
+
+    .function-btn.copied:hover {
+      background: #003d30;
+    }
+
+    /* 아이콘 버튼 SVG 크기 조정 */
+    .function-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .split-pane {
+      background: #333;
+      border-color: #444;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .tab-btn {
+      color: #aaa;
+      padding: 8px 16px;
+      font-size: 1rem;
+      min-height: 40px;
+    }
+
+    .tab-btn:hover {
+      color: #00b896;
+      background: #2a2a2a;
+    }
+
+    .tab-btn.active-tab {
+      color: #fff;
+      background: #222;
+      border-bottom: 2px solid #00b896;
+    }
+
+    .markdown-input, .html-output {
+      background: #2a2a2a;
+      border-color: #555;
+      color: #eee;
+      padding: 12px;
+    }
+
+  .checkbox-label {
+    color: #aaa;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem; /* 터치 영역 확대 */
+    min-height: 44px; /* iOS 권장 터치 타겟 크기 */
+    border-radius: 6px;
+  }
+
+  .checkbox-label:hover {
+    color: #00b896;
+    background-color: rgba(0, 184, 150, 0.1);
+  }
+  }
+
+  @media (max-width: 480px) {
+    .function-bar {
+      padding: 0.4rem 0.5rem;
+      gap: 0.3rem;
+      min-height: 36px;
+    }
+
+    .function-btn {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.85rem;
+      min-height: 32px;
+      min-width: 60px;
+    }
+
+    .tab-btn {
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      min-height: 36px;
+    }
+
+    .split-pane {
+      padding: 8px;
+      min-height: 500px; /* 작은 화면에서도 동일하게 적용 */
+    }
+
+    .markdown-input, .html-output {
+      padding: 8px;
+      font-size: 0.9rem;
+    }    .checkbox-label {
+      font-size: 0.85rem;
+    }
+  }
+
+  /* GitHub 설정 다이얼로그 다크모드 */
+  .github-config-dialog {
+    background: #333;
+    color: #eee;
+  }
+
+  .github-config-header {
+    border-bottom-color: #444;
+  }
+
+  .github-config-header h2 {
+    color: #eee;
+  }
+
+  .github-config-close {
+    color: #aaa;
+  }
+
+  .github-config-close:hover {
+    background: #444;
+    color: #eee;
+  }
+
+  .github-config-field label {
+    color: #eee;
+  }
+
+  .github-config-field input[type="text"],
+  .github-config-field input[type="password"] {
+    background: #2a2a2a;
+    border-color: #555;
+    color: #eee;
+  }
+
+  .github-config-field input[type="text"]:focus,
+  .github-config-field input[type="password"]:focus {
+    border-color: #009879;
+    box-shadow: 0 0 0 3px rgba(0, 152, 121, 0.2);
+  }
+
+  .github-config-field small {
+    color: #aaa;
+  }
+
+  .github-config-guide {
+    background: #2a2a2a;
+    border-color: #444;
+  }
+
+  .github-config-guide h4 {
+    color: #eee;
+  }
+
+  .github-config-guide ol {
+    color: #aaa;
+  }
+
+  .github-config-footer {
+    border-top-color: #444;
+  }
+
+  .github-config-btn-cancel {
+    background: #444;
+    color: #eee;
+    border-color: #555;
+  }
+
+  .github-config-btn-cancel:hover {
+    background: #555;
+  }
+
+  .github-config-btn-save {
+    background: #009879;
+    color: white;
+    border-color: #009879;
+  }
+  .github-config-btn-save:hover {
+    background: #007a61;
+  }
+
+  .github-config-btn-backup,
+  .github-config-btn-restore {
+    background: #6366f1;
+    color: white;
+    border-color: #6366f1;
+  }
+
+  .github-config-btn-backup:hover,
+  .github-config-btn-restore:hover {
+    background: #4f46e5;
+    border-color: #4f46e5;
+  }
+}
+
+/* Toggle More/Less 기능을 위한 CSS */
+.toggle-container {
+  margin: 10px 0;
+  display: block;
+}
+
+.collapsed {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  transition: max-height 0.4s ease !important;
+  opacity: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.expanded {
+  max-height: 2000px !important;
+  overflow: visible !important;
+  transition: max-height 0.4s ease !important;
+  opacity: 1 !important;
+  margin: inherit !important;
+  padding: inherit !important;
+}
+
+.toggle-btn {
+  background: #009879 !important;
+  color: white !important;
+  border: none !important;
+  padding: 6px 14px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  margin: 10px 0 !important;
+  font-size: 14px !important;
+  height: 28px !important;
+  min-width: 80px !important;
+  font-family: inherit !important;
+  font-weight: 500 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
+
+.toggle-btn:hover {
+  background: #007a63 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.toggle-btn:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 토글 콘텐츠 내부 요소들이 제대로 숨겨지도록 */
+.collapsed * {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.expanded * {
+  max-height: none !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+}
+
+/* 토글 콘텐츠 내의 링크 색상 보정 */
+.collapsed a {
+  color: transparent !important;
+}
+
+.expanded a {
+  color: #646cff !important;
+}
+
+.expanded a:hover {
+  color: #535bf2 !important;
+}
+
+/* 모바일 및 태블릿 대응 */
+@media (max-width: 768px) {
+  .split-container {
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    height: 100vh;
+  }  
+  /* 기능 버튼 바 모바일 최적화 */
+  .function-bar {
+    padding: 0.3rem 0.5rem; /* 패딩 축소 */
+    gap: 0.3rem; /* 간격 축소 */
+    min-height: 40px; /* 48px에서 40px로 축소 */
+    flex-wrap: wrap; /* 필요시 버튼이 다음 줄로 이동 */
+    justify-content: flex-start;
+    align-items: center; /* 버튼과 체크박스가 수평 정렬되도록 */
+    max-width: 100%;
+    overflow: visible;
+  }
+  .function-btn {
+    padding: 0.3rem 0.5rem; /* 패딩 축소 */
+    font-size: 0.85rem;
+    min-height: 36px; /* 44px에서 36px로 축소 */
+    height: 36px;
+    min-width: 36px; /* 최소 너비도 축소 */
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    touch-action: manipulation; /* 터치 최적화 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    flex-shrink: 0; /* 버튼이 압축되지 않도록 */
+  }
+
+  /* 아이콘 버튼의 SVG 크기 모바일 최적화 */
+  .function-btn svg {
+    width: 16px; /* 18px에서 16px로 축소 */
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  .checkbox-label {
+    min-height: 28px;        /* 컴팩트한 세로 높이 */
+    padding: 0.2rem 0.4rem;  /* 세로 패딩 축소 */
+    line-height: 1.2;        /* 라인 높이 조정 */
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    transform: scale(1.2); /* 1.3에서 1.2로 축소 */
+    margin-right: 4px; /* 8px에서 4px로 축소 */
+    width: 16px; /* 18px에서 16px로 축소 */
+    height: 16px;
+  }
+
+  /* Split panes 세로 배치 */
+  .split-panes {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .split-pane {
+    margin: 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    min-height: 500px; /* 모바일 세로 높이 500px로 확대 */
+    flex: 1;
+  }
+
+  .left-pane {
+    border-right: 1px solid #ccc;
+    border-bottom: none;
+    margin-bottom: 0;
+    order: 1;
+  }
+
+  .right-pane {
+    border-left: 1px solid #ccc;
+    order: 2;
+  }
+
+  /* 탭 버튼 모바일 최적화 */
+  .tab-btn {
+    padding: 8px 16px;
+    font-size: 1rem;
+    min-height: 40px;
+    touch-action: manipulation;
+    border-radius: 6px 6px 0 0;
+  }
+
+  .tab-bar {
+    margin-bottom: 8px;
+  }
+  /* 체크박스 컨테이너 모바일 최적화 */
+  .checkbox-container {
+    flex-wrap: wrap;
+    gap: 0.3rem; /* 0.5rem에서 0.3rem로 축소 */
+    padding-right: 0;
+    margin-bottom: 0.3rem; /* 아래 마진 축소 */
+  }
+
+  .checkbox-container.margin-left-auto {
+    margin-left: 0;
+    margin-top: 0.3rem; /* 0.5rem에서 0.3rem로 축소 */
+  }
+
+  /* 입력 영역 모바일 최적화 */
+  .markdown-input, .html-output {
+    font-size: 1rem;
+    padding: 12px;
+    border-radius: 8px;
+    min-height: 200px;
+  }
+
+  /* GitHub 설정 다이얼로그 768px 최적화 */
+  .github-config-header-row {
+    flex-direction: row;
+    padding: 0.6rem;
+  }
+
+  .github-config-header-buttons {
+    gap: 0.5rem;
+  }
+
+  .github-config-header-buttons .github-config-btn-cancel,
+  .github-config-header-buttons .github-config-btn-save {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.875rem;
+    min-height: 36px;
+  }
+}
+
+/* 더 작은 모바일 화면 (480px 이하) */
+@media (max-width: 480px) {
+  .function-bar {
+    padding: 0.25rem 0.3rem; /* 패딩 더 축소 */
+    gap: 0.2rem; /* 간격 더 축소 */
+    min-height: 34px; /* 36px에서 34px로 축소 */
+  }.function-btn {
+    padding: 0.25rem 0.4rem; /* 패딩 더 축소 */
+    font-size: 0.8rem;
+    min-height: 32px; /* 36px에서 32px로 축소 */
+    height: 32px;
+    min-width: 50px; /* 최소 너비 축소 */
+    flex-shrink: 0; /* 버튼이 압축되지 않도록 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  }
+
+  /* 아이콘 버튼의 SVG 크기 조정 */
+  .function-btn svg {
+    width: 14px; /* 16px에서 14px로 축소 */
+    height: 14px;
+  }
+
+  .tab-btn {
+    padding: 6px 12px;
+    font-size: 0.85rem; /* 0.9rem에서 축소 */
+    min-height: 32px; /* 36px에서 32px로 축소 */
+  }
+
+  .split-pane {
+    padding: 8px;
+    min-height: 500px; /* 작은 화면에서도 동일하게 적용 */
+  }
+  
+  .markdown-input, .html-output {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .checkbox-label {
+    min-height: 24px;         /* 더욱 컴팩트한 세로 높이 */
+    padding: 0.15rem 0.3rem;   /* 패딩 추가 축소 */
+    line-height: 1.2;          /* 일관된 라인 높이 */
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    transform: scale(1.1); /* 1.2에서 1.1로 축소 */
+    margin-right: 3px; /* 6px에서 3px로 축소 */
+    width: 14px; /* 16px에서 14px로 축소 */
+    height: 14px;
+  }
+
+  /* GitHub 설정 다이얼로그 모바일 최적화 */
+  .github-config-header-row {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+    padding: 0.5rem;
+  }
+
+  .github-config-enable-label {
+    justify-content: center;
+  }
+
+  .github-config-header-buttons {
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .github-config-header-buttons .github-config-btn-cancel,
+  .github-config-header-buttons .github-config-btn-save {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    min-height: 40px;
+  }
+}
+
+
+/* ************* */
+/* ************* */
+/* 다크모드 대응 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #f6f6f6;
+    background-color: #2f2f2f;
+  }
+
+  a:hover {
+    color: #24c8db;
+  }
+
+  input,
+  button {
+    color: #ffffff;
+    background-color: #0f0f0f98;
+  }
+  
+  button:active {
+    background-color: #0f0f0f69;
+  }
+
+  .split-container {
+    background: #222;
+  }
+  
+  .split-pane {
+    background: #333;
+    border-color: #444;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+
+  .tab-bar {
+    border-bottom: 1px solid #444;
+  }
+  
+  .tab-btn {
+    color: #aaa;
+    background: none;
+  }
+    .tab-btn:hover {
+    color: #00b896;
+    background: #2a2a2a;
+  }
+  
+  .tab-btn.active-tab {
+    color: #fff;
+    background: #222;
+    border-bottom: 2px solid #00b896;
+  }
+  
+  .markdown-input, .html-output {
+    background: #2a2a2a;
+    border-color: #555;
+    color: #eee;
+  }
+  
+  textarea.markdown-input, textarea.html-output {
+    font-family: 'D2Coding', Consolas, Monaco, 'Nanum Gothic Coding', 'Noto Sans Mono CJK KR', monospace;
+    font-size: 1.0rem;
+    line-height: 1.6;
+  }
+  .html-output pre {
+    background-color: #2a2a2a;
+    border-color: #444;
+    border-left-color: #009879;
+    color: #ccc;
+  }
+
+  .html-output code {
+    background-color: #2a2a2a;
+    color: #ccc;
+  }
+
+  .html-output blockquote {
+    background: #333;
+    border-left-color: #666;
+    font-size: inherit; /* 기본 폰트 크기 유지 */
+  }
+
+  /* 다크 모드에서도 중첩된 blockquote 폰트 크기 일관성 유지 */
+  .html-output blockquote blockquote {
+    font-size: inherit;
+  }
+
+  .html-output blockquote blockquote blockquote {
+    font-size: inherit;
+  }
+
+  .html-output blockquote blockquote p,
+  .html-output blockquote blockquote blockquote p {
+    font-size: inherit;
+  }
+
+  .html-output table {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .html-output thead tr {
+    background-color: #005a48;
+  }
+
+  .html-output th,
+  .html-output td {
+    border-color: #444;
+  }
+
+  .html-output tbody tr {
+    border-bottom-color: #444;
+  }
+
+  .html-output tbody tr:nth-of-type(even) {
+    background-color: #3a3a3a;
+  }
+
+  .html-output tbody tr:last-of-type {
+    border-bottom-color: #005a48;
+  }
+
+  .checkbox-label {
+    color: #aaa;
+  }
+  .checkbox-label:hover {
+    color: #00b896;
+  }
+  /* 다크모드 기능 버튼 스타일링 */
+  .function-bar {
+    background: #333;
+    border-bottom-color: #444;
+    min-height: 22px;
+    padding: 0.2rem 0.4rem;
+    gap: 0.25rem;
+    margin-bottom: 4px;
+  }
+  .function-btn {
+    background: #009879;
+    color: #fff;
+    min-height: 32px; /* 다크모드에서도 높이 통일 */
+    height: 32px; /* 명시적 높이 지정 */
+    padding: 0.2rem 0.4rem;
+    font-size: 0.95rem;
+  }
+  .function-btn:hover {
+    background: #007a61;
+  }
+
+  .function-btn:active {
+    background: #005a48;
+  }
+  .function-btn.copied {
+    background: #003d30;
+    color: white;
+  }
+
+  .function-btn.copied:hover {
+    background: #003d30;
+  }
+
+  .function-btn.uploading {
+    background: #6b7280;
+    color: white;
+    cursor: not-allowed;
+  }
+
+  .function-btn.uploading:hover {
+    background: #6b7280;
+  }
+
+  .function-btn:disabled {
+    background: #6b7280;
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  /* 다크모드 모바일 최적화 */
+  @media (max-width: 768px) {    .function-bar {
+      background: #333;
+      border-bottom-color: #444;
+      padding: 0.5rem 0.75rem;
+      gap: 0.4rem;
+      min-height: 44px; /* iOS 권장 터치 타겟 크기 */
+      flex-wrap: wrap;
+      align-items: stretch;
+    }    .function-btn {
+      background: #009879;
+      color: #fff;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
+      min-height: 44px; /* iOS 권장 터치 타겟 크기 */
+      height: 44px; /* 다크모드 모바일에서도 명시적 높이 지정 */
+      min-width: 44px; /* 아이콘 버튼을 위한 최소 너비 */
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .function-btn:hover {
+      background: #007a61;
+    }
+
+    .function-btn:active {
+      background: #005a48;
+    }
+
+    .function-btn.copied {
+      background: #003d30;
+    }
+
+    .function-btn.copied:hover {
+      background: #003d30;
+    }
+
+    /* 아이콘 버튼 SVG 크기 조정 */
+    .function-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .split-pane {
+      background: #333;
+      border-color: #444;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .tab-btn {
+      color: #aaa;
+      padding: 8px 16px;
+      font-size: 1rem;
+      min-height: 40px;
+    }
+
+    .tab-btn:hover {
+      color: #00b896;
+      background: #2a2a2a;
+    }
+
+    .tab-btn.active-tab {
+      color: #fff;
+      background: #222;
+      border-bottom: 2px solid #00b896;
+    }
+
+    .markdown-input, .html-output {
+      background: #2a2a2a;
+      border-color: #555;
+      color: #eee;
+      padding: 12px;
+    }
+
+  .checkbox-label {
+    color: #aaa;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem; /* 터치 영역 확대 */
+    min-height: 44px; /* iOS 권장 터치 타겟 크기 */
+    border-radius: 6px;
+  }
+
+  .checkbox-label:hover {
+    color: #00b896;
+    background-color: rgba(0, 184, 150, 0.1);
+  }
+  }
+
+  @media (max-width: 480px) {
+    .function-bar {
+      padding: 0.4rem 0.5rem;
+      gap: 0.3rem;
+      min-height: 36px;
+    }
+
+    .function-btn {
+      padding: 0.4rem 0.6rem;
+      font-size: 0.85rem;
+      min-height: 32px;
+      min-width: 60px;
+    }
+
+    .tab-btn {
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      min-height: 36px;
+    }
+
+    .split-pane {
+      padding: 8px;
+      min-height: 500px; /* 작은 화면에서도 동일하게 적용 */
     }
 
     .markdown-input, .html-output {
