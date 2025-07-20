@@ -822,9 +822,9 @@ textarea.markdown-input, textarea.html-output {
   }
 
   /* Split panes 세로 배치 */
-  .split-panes {
-    flex-direction: column;
-    gap: 8px;
+  .split-pane {
+    /* ...other styles... */
+   min-height: 480px; /* 모바일 세로 높이 480px로 변경 */
   }
 
   .split-pane {
@@ -1504,9 +1504,9 @@ textarea.markdown-input, textarea.html-output {
   }
 
   /* Split panes 세로 배치 */
-  .split-panes {
-    flex-direction: column;
-    gap: 8px;
+  .split-pane {
+    /* ...other styles... */
+   min-height: 480px; /* 작은 화면에서도 세로 높이 480px로 변경 */
   }
 
   .split-pane {
