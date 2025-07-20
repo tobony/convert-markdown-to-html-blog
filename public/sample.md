@@ -13,11 +13,14 @@
 
 이 과정을 통해 Firebase Genkit과 Ollama를 연동하여, 로컬 또는 서버 환경에서 다양한 AI 모델을 활용한 앱을 빠르게 개발할 수 있습니다[1][2][4][5].
 
+<!-- MORE -->
 Citations:
 [1] https://firebase.google.com/docs/genkit-go/plugins/ollama
 [2] https://firebase.google.com/docs/genkit/plugins/ollama
 [3] https://github.com/xavidop/firebase-genkit-ollama
 [4] https://ollama.com/blog/firebase-genkit
+<!-- MORE -->
+
 
 ---
 

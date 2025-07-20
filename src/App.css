@@ -519,9 +519,18 @@ button:active {
 .html-output h5,
 .html-output h6,
 .html-output strong,
-.html-output em,
-.html-output a {
+.html-output em {
   color: inherit !important;
+}
+
+/* 링크는 기본 색상 유지 - Toggle More/Less 비활성화 시에도 표시 */
+.html-output a {
+  color: #646cff !important;
+  text-decoration: underline !important;
+}
+
+.html-output a:hover {
+  color: #535bf2 !important;
 }
 
 textarea.markdown-input, textarea.html-output {
@@ -1324,4 +1333,88 @@ textarea.markdown-input, textarea.html-output {
     background: #4f46e5;
     border-color: #4f46e5;
   }
+}
+
+/* Toggle More/Less 기능을 위한 CSS */
+.toggle-container {
+  margin: 10px 0;
+  display: block;
+}
+
+.collapsed {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  transition: max-height 0.4s ease !important;
+  opacity: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.expanded {
+  max-height: 2000px !important;
+  overflow: visible !important;
+  transition: max-height 0.4s ease !important;
+  opacity: 1 !important;
+  margin: inherit !important;
+  padding: inherit !important;
+}
+
+.toggle-btn {
+  background: #009879 !important;
+  color: white !important;
+  border: none !important;
+  padding: 6px 14px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  margin: 10px 0 !important;
+  font-size: 14px !important;
+  height: 28px !important;
+  min-width: 80px !important;
+  font-family: inherit !important;
+  font-weight: 500 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
+
+.toggle-btn:hover {
+  background: #007a63 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.toggle-btn:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 토글 콘텐츠 내부 요소들이 제대로 숨겨지도록 */
+.collapsed * {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.expanded * {
+  max-height: none !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+}
+
+/* 토글 콘텐츠 내의 링크 색상 보정 */
+.collapsed a {
+  color: transparent !important;
+}
+
+.expanded a {
+  color: #646cff !important;
+}
+
+.expanded a:hover {
+  color: #535bf2 !important;
 }

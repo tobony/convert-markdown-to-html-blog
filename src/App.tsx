@@ -60,6 +60,18 @@ marked.use(
   }
 );
 
+// 모든 링크가 새 탭에서 열리도록 설정
+marked.use({
+  renderer: {
+    link: (token) => {
+      const href = token.href || '';
+      const title = token.title ? ` title="${token.title}"` : '';
+      const text = token.text || '';
+      return `<a href="${href}"${title} target="_blank" rel="noopener noreferrer">${text}</a>`;
+    }
+  }
+});
+
 function App() {  const [markdown, setMarkdown] = useState("");
   const [userCss, setUserCss] = useState("");
   const [leftTab, setLeftTab] = useState<'markdown' | 'css'>("markdown");
@@ -68,10 +80,12 @@ function App() {  const [markdown, setMarkdown] = useState("");
   const [bloggerCodeblock, setBloggerCodeblock] = useState(true); // 기본값을 true로 변경
   const [applyUserCss, setApplyUserCss] = useState(true); // New state for applying user CSS
   const [removeCitations, setRemoveCitations] = useState(false); // New state for removing citations
+  const [toggleFunction, setToggleFunction] = useState(true); // New toggle function state - 기본 활성화
   const [functionCheckbox1, setFunctionCheckbox1] = useState(false);
   const [functionCheckbox2, setFunctionCheckbox2] = useState(false);
   const [isCopied, setIsCopied] = useState(false); // 복사 완료 상태 관리
-  const htmlOutputRef = useRef<HTMLDivElement>(null); // Ref for the HTML output div  // GitHub 연동 관련 상태
+  const htmlOutputRef = useRef<HTMLDivElement>(null); // Ref for the HTML output div
+  const markdownTextareaRef = useRef<HTMLTextAreaElement>(null); // Ref for the markdown textarea  // GitHub 연동 관련 상태
   const { getConfig, isConfigured, saveSettings } = useGitHubConfig();
   const [isUploading, setIsUploading] = useState(false);
   const [showGitHubConfig, setShowGitHubConfig] = useState(false);
@@ -247,6 +261,7 @@ function App() {  const [markdown, setMarkdown] = useState("");
       tab, 
       functionCheckbox1, 
       functionCheckbox2,
+      toggleFunction,
       timestamp: new Date().toISOString()
     });
 
@@ -314,26 +329,159 @@ function App() {  const [markdown, setMarkdown] = useState("");
       }
     });
 
-    // 링크는 항상 파란색 유지
-    linkElements.forEach((element, index) => {
-      (element as HTMLElement).style.setProperty('color', '#646cff', 'important');
-      if (index < 3) { // 처음 3개만 로그
-        console.log(`🔗 링크 ${index + 1} 파란색 유지:`, {
-          color: '#646cff',
-          href: element.getAttribute('href')
-        });
-      }
-    });
+    // 링크는 항상 파란색 유지 - 단, Toggle More/Less가 활성화된 경우에만 강제 적용
+    if (toggleFunction) {
+      linkElements.forEach((element, index) => {
+        (element as HTMLElement).style.setProperty('color', '#646cff', 'important');
+        if (index < 3) { // 처음 3개만 로그
+          console.log(`🔗 링크 ${index + 1} 파란색 강제 적용 (Toggle 활성화):`, {
+            color: '#646cff',
+            href: element.getAttribute('href')
+          });
+        }
+      });
+    } else {
+      // Toggle More/Less가 비활성화된 경우, 링크의 인라인 스타일 제거하여 CSS 기본값 사용
+      linkElements.forEach((element, index) => {
+        (element as HTMLElement).style.removeProperty('color');
+        if (index < 3) { // 처음 3개만 로그
+          console.log(`🔗 링크 ${index + 1} 기본 CSS 색상 사용 (Toggle 비활성화):`, {
+            href: element.getAttribute('href')
+          });
+        }
+      });
+    }
 
     console.log('🎨 색상 적용 완료:', {
       targetColor,
       cssVariable: targetColor,
       targetElementsCount: targetElements.length,
       excludeElementsCount: excludeElements.length,
-      linkElementsCount: linkElements.length
+      linkElementsCount: linkElements.length,
+      toggleFunction
     });
 
-  }, [functionCheckbox1, functionCheckbox2, markdown, removeCitations, tab]);
+  }, [functionCheckbox1, functionCheckbox2, markdown, removeCitations, tab, toggleFunction]);
+
+  // Toggle More/Less 기능을 HTML Output 탭에서도 동작하도록 설정
+  useEffect(() => {
+    if (tab === 'html_output' && toggleFunction && htmlOutputRef.current) {
+      console.log('🎯 Toggle More/Less useEffect 실행됨');
+
+      // 토글 함수 정의
+      const toggleMoreLess = (button: HTMLButtonElement) => {
+        console.log('🔄 toggleMoreLess 함수 실행됨:', { 
+          button: button.textContent,
+          buttonElement: button 
+        });
+        
+        // 새로운 구조에서는 버튼과 콘텐츠가 같은 컨테이너 안에 있음
+        const container = button.parentElement;
+        const content = container?.querySelector('[data-ke-type="moreLess"]') as HTMLElement;
+        
+        console.log('🎯 콘텐츠 찾기:', { 
+          containerFound: !!container,
+          containerClass: container?.className,
+          contentFound: !!content, 
+          tagName: content?.tagName,
+          dataKeType: content?.getAttribute('data-ke-type'),
+          classes: content?.className,
+          currentStyle: content ? window.getComputedStyle(content).maxHeight : 'N/A'
+        });
+        
+        if (content && content.getAttribute('data-ke-type') === 'moreLess') {
+          const isExpanded = content.classList.contains('expanded');
+          console.log('📊 현재 상태:', { 
+            isExpanded, 
+            classes: content.className,
+            computedMaxHeight: window.getComputedStyle(content).maxHeight,
+            computedOpacity: window.getComputedStyle(content).opacity
+          });
+          
+          // 클래스 변경 전 강제로 스타일 초기화
+          content.style.transition = 'all 0.4s ease';
+          
+          if (isExpanded) {
+            console.log('🔄 콘텐츠 닫기 시작...');
+            content.classList.remove('expanded');
+            content.classList.add('collapsed');
+            button.textContent = content.getAttribute('data-text-more') || '더보기';
+            console.log('✅ 콘텐츠 닫기 완료');
+          } else {
+            console.log('🔄 콘텐츠 열기 시작...');
+            content.classList.remove('collapsed');
+            content.classList.add('expanded');
+            button.textContent = content.getAttribute('data-text-less') || '닫기';
+            console.log('✅ 콘텐츠 열기 완료');
+          }
+          
+          // 변경 후 상태 확인
+          setTimeout(() => {
+            console.log('🎨 변경 후 클래스:', {
+              className: content.className,
+              computedMaxHeight: window.getComputedStyle(content).maxHeight,
+              computedOpacity: window.getComputedStyle(content).opacity,
+              visible: content.offsetHeight > 0
+            });
+          }, 100);
+          
+        } else {
+          console.error('❌ 토글할 콘텐츠를 찾을 수 없습니다:', { 
+            container, 
+            content,
+            dataKeType: content?.getAttribute('data-ke-type'),
+            containerChildren: container ? Array.from(container.children).map(el => ({
+              tagName: el.tagName,
+              className: el.className,
+              dataKeType: el.getAttribute('data-ke-type')
+            })) : []
+          });
+        }
+      };
+
+      // 토글 버튼에 이벤트 리스너 추가
+      const toggleButtons = htmlOutputRef.current.querySelectorAll('.toggle-btn');
+      console.log('🎯 토글 버튼 개수:', toggleButtons.length);
+      
+      // HTML 구조 분석
+      if (toggleButtons.length > 0) {
+        const firstButton = toggleButtons[0] as HTMLButtonElement;
+        console.log('🔍 HTML 구조 분석:', {
+          button: firstButton.outerHTML,
+          parent: firstButton.parentElement?.tagName,
+          parentHTML: firstButton.parentElement?.outerHTML.substring(0, 200) + '...',
+          nextSibling: firstButton.nextSibling?.nodeType === Node.ELEMENT_NODE ? (firstButton.nextSibling as Element).tagName : 'NOT_ELEMENT',
+          nextElementSibling: firstButton.nextElementSibling?.tagName,
+          allSiblings: Array.from(firstButton.parentElement?.children || []).map(el => ({
+            tagName: el.tagName,
+            className: el.className,
+            textContent: el.textContent?.substring(0, 50) + '...'
+          }))
+        });
+      }
+      
+      toggleButtons.forEach((button, index) => {
+        const htmlButton = button as HTMLButtonElement;
+        console.log(`🔘 버튼 ${index + 1} 이벤트 리스너 추가:`, { 
+          textContent: htmlButton.textContent,
+          nextSibling: htmlButton.nextElementSibling?.tagName 
+        });
+        
+        htmlButton.addEventListener('click', () => {
+          console.log(`🖱️ 버튼 ${index + 1} 클릭됨`);
+          toggleMoreLess(htmlButton);
+        });
+      });
+
+      // cleanup function
+      return () => {
+        toggleButtons.forEach((button) => {
+          const htmlButton = button as HTMLButtonElement;
+          htmlButton.removeEventListener('click', () => toggleMoreLess(htmlButton));
+        });
+      };
+    }
+  }, [tab, toggleFunction, markdown]);
 
   // Load sample.md content when the component mounts
   useEffect(() => {
@@ -368,6 +516,61 @@ function App() {  const [markdown, setMarkdown] = useState("");
     // Remove any leading/trailing newlines that might be left
     processedMarkdown = processedMarkdown.trim();
   }
+  
+  // Process markdown based on toggleFunction state
+  if (toggleFunction) {
+    console.log('🔄 Toggle More/Less 기능 활성화됨');
+    console.log('📝 처리 전 마크다운 길이:', processedMarkdown.length);
+    console.log('🔍 <!-- MORE --> 포함 여부:', processedMarkdown.includes('<!-- MORE -->'));
+    
+    // <!-- MORE --> 패턴의 위치 찾기 (대소문자 구분 없음)
+    const matches = processedMarkdown.match(/<!--\s*more\s*-->/gi);
+    if (matches) {
+      console.log('🎯 발견된 <!-- MORE --> 개수:', matches.length);
+    }
+    
+    // Convert sections marked with <!-- MORE --> to collapsible sections
+    // 대소문자 구분 없이 처리하고, 앞뒤 공백과 줄바꿈을 유연하게 처리
+    const beforeReplace = processedMarkdown;
+    let replaceCount = 0;
+    
+    processedMarkdown = processedMarkdown.replace(
+      /<!--\s*more\s*-->\s*([\s\S]*?)\s*<!--\s*more\s*-->/gi,
+      (match, content) => {
+        replaceCount++;
+        console.log(`✅ ${replaceCount}번째 <!-- MORE --> 패턴 매칭됨:`, {
+          matchLength: match.length,
+          contentPreview: content.substring(0, 100) + (content.length > 100 ? '...' : ''),
+          contentLength: content.length
+        });
+        
+        const trimmedContent = content.trim();
+        const result = `\n\n<div class="toggle-container">\n<button class="toggle-btn">더보기</button>\n<div data-ke-type="moreLess" data-text-more="더보기" data-text-less="닫기" class="collapsed">\n\n${trimmedContent}\n\n</div>\n</div>\n\n`;
+        
+        console.log('🔄 변환 결과 길이:', result.length);
+        return result;
+      }
+    );
+    
+    console.log('📊 변환 통계:', {
+      변환전길이: beforeReplace.length,
+      변환후길이: processedMarkdown.length,
+      변환횟수: replaceCount,
+      변환여부: beforeReplace !== processedMarkdown
+    });
+    
+    if (beforeReplace === processedMarkdown) {
+      console.log('❌ <!-- MORE --> 패턴이 매칭되지 않음');
+      // 첫 번째 <!-- MORE --> 위치 찾기
+      const firstIndex = processedMarkdown.toLowerCase().indexOf('<!-- more -->');
+      if (firstIndex !== -1) {
+        console.log('🔍 첫 번째 <!-- MORE --> 위치:', firstIndex);
+        console.log('� 주변 텍스트:', processedMarkdown.substring(Math.max(0, firstIndex - 50), firstIndex + 100));
+      }
+    } else {
+      console.log('✅ <!-- MORE --> 패턴 변환 완료');
+    }
+  }
 
   // 기본 HTML 생성 - 이 HTML은 "HTML Output" 탭에 표시됨
   const html = marked.parse(processedMarkdown);
@@ -375,16 +578,153 @@ function App() {  const [markdown, setMarkdown] = useState("");
   // "HTML Code" 탭용 HTML 생성 - 체크박스 상태에 따라 다른 HTML 생성
   let bloggerHtml = '';
   
+  // Toggle More/Less 기능용 CSS 및 JavaScript
+  const toggleMoreLessAssets = toggleFunction ? `
+<style>
+.toggle-container {
+  margin: 10px 0;
+  display: block;
+}
+.collapsed {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  transition: max-height 0.4s ease !important;
+  opacity: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.expanded {
+  max-height: 2000px !important;
+  overflow: visible !important;
+  transition: max-height 0.4s ease !important;
+  opacity: 1 !important;
+  margin: inherit !important;
+  padding: inherit !important;
+}
+.toggle-btn {
+  background: #009879 !important;
+  color: white !important;
+  border: none !important;
+  padding: 6px 14px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  margin: 10px 0 !important;
+  font-size: 14px !important;
+  height: 28px !important;
+  min-width: 80px !important;
+  font-family: inherit !important;
+  font-weight: 500 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
+.toggle-btn:hover {
+  background: #007a63 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+.collapsed * {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.expanded * {
+  max-height: none !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+}
+</style>
+
+<script>
+function toggleMoreLess(button) {
+  console.log('🔄 전역 toggleMoreLess 함수 실행됨:', button.textContent);
+  
+  // 새로운 구조에서는 버튼과 콘텐츠가 같은 컨테이너 안에 있음
+  const container = button.parentElement;
+  const content = container ? container.querySelector('[data-ke-type="moreLess"]') : null;
+  
+  console.log('🎯 콘텐츠 찾기:', { 
+    containerFound: !!container,
+    containerClass: container?.className,
+    contentFound: !!content, 
+    tagName: content?.tagName,
+    dataKeType: content?.getAttribute('data-ke-type'),
+    classes: content?.className 
+  });
+  
+  if (content && content.getAttribute('data-ke-type') === 'moreLess') {
+    const isExpanded = content.classList.contains('expanded');
+    console.log('📊 현재 상태:', { isExpanded: isExpanded, classes: content.className });
+    
+    // 강제로 transition 설정
+    content.style.transition = 'all 0.4s ease';
+    
+    if (isExpanded) {
+      content.classList.remove('expanded');
+      content.classList.add('collapsed');
+      button.textContent = content.getAttribute('data-text-more') || '더보기';
+      console.log('✅ 콘텐츠 닫기 완료');
+    } else {
+      content.classList.remove('collapsed');
+      content.classList.add('expanded');
+      button.textContent = content.getAttribute('data-text-less') || '닫기';
+      console.log('✅ 콘텐츠 열기 완료');
+    }
+    
+    setTimeout(function() {
+      console.log('🎨 변경 후 클래스:', {
+        className: content.className,
+        visible: content.offsetHeight > 0
+      });
+    }, 100);
+    
+  } else {
+    console.error('❌ 토글할 콘텐츠를 찾을 수 없습니다:', { 
+      container: container, 
+      content: content,
+      dataKeType: content?.getAttribute('data-ke-type'),
+      containerChildren: container ? Array.from(container.children).map(function(el) {
+        return {
+          tagName: el.tagName,
+          className: el.className,
+          dataKeType: el.getAttribute('data-ke-type')
+        };
+      }) : []
+    });
+  }
+}
+
+// DOM이 로드된 후 이벤트 리스너 추가
+document.addEventListener('DOMContentLoaded', function() {
+  const toggleButtons = document.querySelectorAll('.toggle-btn');
+  console.log('🎯 DOMContentLoaded - 토글 버튼 개수:', toggleButtons.length);
+  
+  toggleButtons.forEach(function(button, index) {
+    console.log('🔘 버튼 ' + (index + 1) + ' 이벤트 리스너 추가');
+    button.addEventListener('click', function() {
+      console.log('🖱️ 버튼 ' + (index + 1) + ' 클릭됨');
+      toggleMoreLess(this);
+    });
+  });
+});
+</script>
+` : '';
+  
   if (withoutStyle) {
     // 스타일 없이 HTML만 포함
-    bloggerHtml = `<div class="blogger-html-body">\n${html}\n</div>`;
+    bloggerHtml = `<div class="blogger-html-body">\n${html}\n</div>${toggleMoreLessAssets}`;
   } else {
     // 스타일 포함
     let effectiveStyles = appCss; // Start with base app CSS
     if (applyUserCss) { // Conditionally add userCss if applyUserCss is true
       effectiveStyles += `\n${userCss}`;
     }
-    bloggerHtml = `\n<style>\n${effectiveStyles}\n</style>\n<div class="blogger-html-body">\n${html}\n</div>`;
+    bloggerHtml = `\n<style>\n${effectiveStyles}\n</style>\n<div class="blogger-html-body">\n${html}\n</div>${toggleMoreLessAssets}`;
   }
   
   // Blogger 코드블록 기능 적용 (HTML Code 탭에만 영향)
@@ -470,6 +810,29 @@ function App() {  const [markdown, setMarkdown] = useState("");
   const handleFunction1 = () => {
     // 마크다운 텍스트 영역 내용 전체 삭제
     setMarkdown("");
+  };
+
+  // MORE 주석 삽입 핸들러
+  const handleInsertMore = () => {
+    if (markdownTextareaRef.current) {
+      const textarea = markdownTextareaRef.current;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const currentValue = textarea.value;
+      
+      // 커서 위치에 <!-- MORE --> 삽입
+      const moreComment = '<!-- MORE -->';
+      const newValue = currentValue.slice(0, start) + moreComment + currentValue.slice(end);
+      
+      setMarkdown(newValue);
+      
+      // 포커스를 다시 설정하고 커서를 <!-- MORE --> 뒤로 이동
+      setTimeout(() => {
+        textarea.focus();
+        const newCursorPosition = start + moreComment.length;
+        textarea.setSelectionRange(newCursorPosition, newCursorPosition);
+      }, 0);
+    }
   };
   const handleFunction3 = async () => {
     // GitHub 파일 업로드 기능
@@ -765,6 +1128,17 @@ function App() {  const [markdown, setMarkdown] = useState("");
           title="GitHub 설정"
         >
           ⚙️
+        </button>
+
+        <button 
+          type="button" 
+          className="function-btn"
+          onClick={handleInsertMore}
+          title="MORE 주석 삽입"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 9V15M9 12H15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </button><label className="checkbox-label">
           <input
             type="checkbox"
@@ -814,6 +1188,14 @@ function App() {  const [markdown, setMarkdown] = useState("");
             <label className="checkbox-label">
               <input
                 type="checkbox"
+                checked={toggleFunction}
+                onChange={() => setToggleFunction(!toggleFunction)}
+              />
+              Toggle More/Less
+            </label>
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
                 checked={removeCitations}
                 onChange={() => setRemoveCitations(!removeCitations)}
               />
@@ -836,6 +1218,7 @@ function App() {  const [markdown, setMarkdown] = useState("");
           </div>
           {leftTab === "markdown" ? (
             <textarea
+              ref={markdownTextareaRef}
               className="markdown-input"
               value={markdown}
               onChange={e => setMarkdown(e.target.value)}
