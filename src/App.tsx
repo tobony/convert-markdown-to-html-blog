@@ -363,125 +363,7 @@ function App() {  const [markdown, setMarkdown] = useState("");
 
   }, [functionCheckbox1, functionCheckbox2, markdown, removeCitations, tab, toggleFunction]);
 
-  // Toggle More/Less 기능을 HTML Output 탭에서도 동작하도록 설정
-  useEffect(() => {
-    if (tab === 'html_output' && toggleFunction && htmlOutputRef.current) {
-      console.log('🎯 Toggle More/Less useEffect 실행됨');
-
-      // 토글 함수 정의
-      const toggleMoreLess = (button: HTMLButtonElement) => {
-        console.log('🔄 toggleMoreLess 함수 실행됨:', { 
-          button: button.textContent,
-          buttonElement: button 
-        });
-        
-        // 새로운 구조에서는 버튼과 콘텐츠가 같은 컨테이너 안에 있음
-        const container = button.parentElement;
-        const content = container?.querySelector('[data-ke-type="moreLess"]') as HTMLElement;
-        
-        console.log('🎯 콘텐츠 찾기:', { 
-          containerFound: !!container,
-          containerClass: container?.className,
-          contentFound: !!content, 
-          tagName: content?.tagName,
-          dataKeType: content?.getAttribute('data-ke-type'),
-          classes: content?.className,
-          currentStyle: content ? window.getComputedStyle(content).maxHeight : 'N/A'
-        });
-        
-        if (content && content.getAttribute('data-ke-type') === 'moreLess') {
-          const isExpanded = content.classList.contains('expanded');
-          console.log('📊 현재 상태:', { 
-            isExpanded, 
-            classes: content.className,
-            computedMaxHeight: window.getComputedStyle(content).maxHeight,
-            computedOpacity: window.getComputedStyle(content).opacity
-          });
-          
-          // 클래스 변경 전 강제로 스타일 초기화
-          content.style.transition = 'all 0.4s ease';
-          
-          if (isExpanded) {
-            console.log('🔄 콘텐츠 닫기 시작...');
-            content.classList.remove('expanded');
-            content.classList.add('collapsed');
-            button.textContent = content.getAttribute('data-text-more') || '더보기';
-            console.log('✅ 콘텐츠 닫기 완료');
-          } else {
-            console.log('🔄 콘텐츠 열기 시작...');
-            content.classList.remove('collapsed');
-            content.classList.add('expanded');
-            button.textContent = content.getAttribute('data-text-less') || '닫기';
-            console.log('✅ 콘텐츠 열기 완료');
-          }
-          
-          // 변경 후 상태 확인
-          setTimeout(() => {
-            console.log('🎨 변경 후 클래스:', {
-              className: content.className,
-              computedMaxHeight: window.getComputedStyle(content).maxHeight,
-              computedOpacity: window.getComputedStyle(content).opacity,
-              visible: content.offsetHeight > 0
-            });
-          }, 100);
-          
-        } else {
-          console.error('❌ 토글할 콘텐츠를 찾을 수 없습니다:', { 
-            container, 
-            content,
-            dataKeType: content?.getAttribute('data-ke-type'),
-            containerChildren: container ? Array.from(container.children).map(el => ({
-              tagName: el.tagName,
-              className: el.className,
-              dataKeType: el.getAttribute('data-ke-type')
-            })) : []
-          });
-        }
-      };
-
-      // 토글 버튼에 이벤트 리스너 추가
-      const toggleButtons = htmlOutputRef.current.querySelectorAll('.toggle-btn');
-      console.log('🎯 토글 버튼 개수:', toggleButtons.length);
-      
-      // HTML 구조 분석
-      if (toggleButtons.length > 0) {
-        const firstButton = toggleButtons[0] as HTMLButtonElement;
-        console.log('🔍 HTML 구조 분석:', {
-          button: firstButton.outerHTML,
-          parent: firstButton.parentElement?.tagName,
-          parentHTML: firstButton.parentElement?.outerHTML.substring(0, 200) + '...',
-          nextSibling: firstButton.nextSibling?.nodeType === Node.ELEMENT_NODE ? (firstButton.nextSibling as Element).tagName : 'NOT_ELEMENT',
-          nextElementSibling: firstButton.nextElementSibling?.tagName,
-          allSiblings: Array.from(firstButton.parentElement?.children || []).map(el => ({
-            tagName: el.tagName,
-            className: el.className,
-            textContent: el.textContent?.substring(0, 50) + '...'
-          }))
-        });
-      }
-      
-      toggleButtons.forEach((button, index) => {
-        const htmlButton = button as HTMLButtonElement;
-        console.log(`🔘 버튼 ${index + 1} 이벤트 리스너 추가:`, { 
-          textContent: htmlButton.textContent,
-          nextSibling: htmlButton.nextElementSibling?.tagName 
-        });
-        
-        htmlButton.addEventListener('click', () => {
-          console.log(`🖱️ 버튼 ${index + 1} 클릭됨`);
-          toggleMoreLess(htmlButton);
-        });
-      });
-
-      // cleanup function
-      return () => {
-        toggleButtons.forEach((button) => {
-          const htmlButton = button as HTMLButtonElement;
-          htmlButton.removeEventListener('click', () => toggleMoreLess(htmlButton));
-        });
-      };
-    }
-  }, [tab, toggleFunction, markdown]);
+  // Toggle More/Less 기능은 인라인 onclick으로 처리되므로 별도의 React useEffect 불필요
 
   // Load sample.md content when the component mounts
   useEffect(() => {
@@ -545,7 +427,9 @@ function App() {  const [markdown, setMarkdown] = useState("");
         });
         
         const trimmedContent = content.trim();
-        const result = `\n\n<div class="toggle-container">\n<button class="toggle-btn">더보기</button>\n<div data-ke-type="moreLess" data-text-more="더보기" data-text-less="닫기" class="collapsed">\n\n${trimmedContent}\n\n</div>\n</div>\n\n`;
+        // 고유한 ID 생성 (timestamp + 카운터 사용)
+        const uniqueId = `more${Date.now()}_${replaceCount}`;
+        const result = `\n\n<span id="${uniqueId}" style="cursor: pointer; color: #646cff; text-decoration: underline;" onclick="console.log('Toggle clicked!', this); var content=document.getElementById('story${uniqueId}'); console.log('Content element:', content); if(!content) {console.error('Content element not found!'); return;} console.log('Display:', content.style.display); if(content.style.display=='none' || content.style.display=='') {content.style.display='block'; this.innerText='[접기]'; console.log('Expanded')} else {content.style.display='none'; this.innerText='[펼치기]'; console.log('Collapsed')}">[펼치기]</span>\n<div id="story${uniqueId}" style="display: none">\n\n${trimmedContent}\n\n</div>\n\n`;
         
         console.log('🔄 변환 결과 길이:', result.length);
         return result;
@@ -565,7 +449,7 @@ function App() {  const [markdown, setMarkdown] = useState("");
       const firstIndex = processedMarkdown.toLowerCase().indexOf('<!-- more -->');
       if (firstIndex !== -1) {
         console.log('🔍 첫 번째 <!-- MORE --> 위치:', firstIndex);
-        console.log('� 주변 텍스트:', processedMarkdown.substring(Math.max(0, firstIndex - 50), firstIndex + 100));
+        console.log('📝 주변 텍스트:', processedMarkdown.substring(Math.max(0, firstIndex - 50), firstIndex + 100));
       }
     } else {
       console.log('✅ <!-- MORE --> 패턴 변환 완료');
@@ -578,142 +462,8 @@ function App() {  const [markdown, setMarkdown] = useState("");
   // "HTML Code" 탭용 HTML 생성 - 체크박스 상태에 따라 다른 HTML 생성
   let bloggerHtml = '';
   
-  // Toggle More/Less 기능용 CSS 및 JavaScript
-  const toggleMoreLessAssets = toggleFunction ? `
-<style>
-.toggle-container {
-  margin: 10px 0;
-  display: block;
-}
-.collapsed {
-  max-height: 0 !important;
-  overflow: hidden !important;
-  transition: max-height 0.4s ease !important;
-  opacity: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-.expanded {
-  max-height: 2000px !important;
-  overflow: visible !important;
-  transition: max-height 0.4s ease !important;
-  opacity: 1 !important;
-  margin: inherit !important;
-  padding: inherit !important;
-}
-.toggle-btn {
-  background: #009879 !important;
-  color: white !important;
-  border: none !important;
-  padding: 6px 14px !important;
-  border-radius: 4px !important;
-  cursor: pointer !important;
-  margin: 10px 0 !important;
-  font-size: 14px !important;
-  height: 28px !important;
-  min-width: 80px !important;
-  font-family: inherit !important;
-  font-weight: 500 !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-  transition: all 0.2s ease !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  line-height: 1 !important;
-}
-.toggle-btn:hover {
-  background: #007a63 !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
-}
-.collapsed * {
-  max-height: 0 !important;
-  overflow: hidden !important;
-  opacity: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-.expanded * {
-  max-height: none !important;
-  overflow: visible !important;
-  opacity: 1 !important;
-}
-</style>
-
-<script>
-function toggleMoreLess(button) {
-  console.log('🔄 전역 toggleMoreLess 함수 실행됨:', button.textContent);
-  
-  // 새로운 구조에서는 버튼과 콘텐츠가 같은 컨테이너 안에 있음
-  const container = button.parentElement;
-  const content = container ? container.querySelector('[data-ke-type="moreLess"]') : null;
-  
-  console.log('🎯 콘텐츠 찾기:', { 
-    containerFound: !!container,
-    containerClass: container?.className,
-    contentFound: !!content, 
-    tagName: content?.tagName,
-    dataKeType: content?.getAttribute('data-ke-type'),
-    classes: content?.className 
-  });
-  
-  if (content && content.getAttribute('data-ke-type') === 'moreLess') {
-    const isExpanded = content.classList.contains('expanded');
-    console.log('📊 현재 상태:', { isExpanded: isExpanded, classes: content.className });
-    
-    // 강제로 transition 설정
-    content.style.transition = 'all 0.4s ease';
-    
-    if (isExpanded) {
-      content.classList.remove('expanded');
-      content.classList.add('collapsed');
-      button.textContent = content.getAttribute('data-text-more') || '더보기';
-      console.log('✅ 콘텐츠 닫기 완료');
-    } else {
-      content.classList.remove('collapsed');
-      content.classList.add('expanded');
-      button.textContent = content.getAttribute('data-text-less') || '닫기';
-      console.log('✅ 콘텐츠 열기 완료');
-    }
-    
-    setTimeout(function() {
-      console.log('🎨 변경 후 클래스:', {
-        className: content.className,
-        visible: content.offsetHeight > 0
-      });
-    }, 100);
-    
-  } else {
-    console.error('❌ 토글할 콘텐츠를 찾을 수 없습니다:', { 
-      container: container, 
-      content: content,
-      dataKeType: content?.getAttribute('data-ke-type'),
-      containerChildren: container ? Array.from(container.children).map(function(el) {
-        return {
-          tagName: el.tagName,
-          className: el.className,
-          dataKeType: el.getAttribute('data-ke-type')
-        };
-      }) : []
-    });
-  }
-}
-
-// DOM이 로드된 후 이벤트 리스너 추가
-document.addEventListener('DOMContentLoaded', function() {
-  const toggleButtons = document.querySelectorAll('.toggle-btn');
-  console.log('🎯 DOMContentLoaded - 토글 버튼 개수:', toggleButtons.length);
-  
-  toggleButtons.forEach(function(button, index) {
-    console.log('🔘 버튼 ' + (index + 1) + ' 이벤트 리스너 추가');
-    button.addEventListener('click', function() {
-      console.log('🖱️ 버튼 ' + (index + 1) + ' 클릭됨');
-      toggleMoreLess(this);
-    });
-  });
-});
-</script>
-` : '';
+  // Toggle More/Less 기능용 CSS 및 JavaScript - 간단한 인라인 방식 사용으로 별도 assets 불필요
+  const toggleMoreLessAssets = '';
   
   if (withoutStyle) {
     // 스타일 없이 HTML만 포함
