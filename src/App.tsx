@@ -84,6 +84,7 @@ function App() {  const [markdown, setMarkdown] = useState("");
   const [functionCheckbox1, setFunctionCheckbox1] = useState(false);
   const [functionCheckbox2, setFunctionCheckbox2] = useState(false);
   const [isCopied, setIsCopied] = useState(false); // 복사 완료 상태 관리
+  const [isCopyAllTogglesCopied, setIsCopyAllTogglesCopied] = useState(false); // Copy All Toggles 복사 완료 상태 관리
   const htmlOutputRef = useRef<HTMLDivElement>(null); // Ref for the HTML output div
   const markdownTextareaRef = useRef<HTMLTextAreaElement>(null); // Ref for the markdown textarea  // GitHub 연동 관련 상태
   const { getConfig, isConfigured, saveSettings } = useGitHubConfig();
@@ -787,6 +788,105 @@ function App() {  const [markdown, setMarkdown] = useState("");
       console.error('마크다운 다운로드 실패:', error);
       alert('다운로드 중 오류가 발생했습니다.');
     }
+  };
+
+  // 모든 펼치기 항목을 한꺼번에 복사하는 핸들러
+  const handleCopyAllToggleItems = async () => {
+    try {
+      if (tab !== 'html_output') {
+        console.warn('HTML Output 탭에서만 사용 가능합니다.');
+        return;
+      }
+
+      // HTML Output 탭에서 실제 DOM의 모든 toggle 요소 찾기
+      const htmlOutputElement = htmlOutputRef.current;
+      if (!htmlOutputElement) {
+        alert('HTML Output 영역을 찾을 수 없습니다.');
+        return;
+      }
+      
+      // 모든 toggle 컨테이너 찾기
+      const toggleContainers = htmlOutputElement.querySelectorAll('[id^="toggle"]');
+      
+      if (toggleContainers.length === 0) {
+        alert('복사할 펼치기 항목이 없습니다.');
+        return;
+      }
+
+      console.log(`발견된 펼치기 항목 수: ${toggleContainers.length}`);
+
+      // 첫 번째 toggle 항목을 기준으로 하되, 모든 내용을 합치기
+      const firstToggle = toggleContainers[0] as HTMLElement;
+      const firstToggleId = firstToggle.id;
+      const firstSpanId = firstToggleId.replace('toggle', '');
+      const firstStoryId = firstToggleId.replace('toggle', 'story');
+
+      // 모든 toggle 항목의 story 내용 수집
+      let combinedContent = '';
+      toggleContainers.forEach((container, index) => {
+        const storyElement = container.querySelector('[id^="story"]') as HTMLElement;
+        if (storyElement && storyElement.innerHTML) {
+          combinedContent += storyElement.innerHTML;
+          // 마지막 항목이 아닌 경우 구분선 추가
+          if (index < toggleContainers.length - 1) {
+            combinedContent += '<hr>';
+          }
+        }
+        console.log(`펼치기 항목 ${index + 1} 내용 추가됨`);
+      });
+
+      // 합쳐진 내용으로 새로운 toggle HTML 생성
+      const combinedHtml = `<h3>참고자료</h3>
+<div id="${firstToggleId}"><span id="${firstSpanId}" style="cursor: pointer; color: #646cff; text-decoration: underline;" onclick="var content=document.getElementById('${firstStoryId}'); if(!content) return; if(content.style.display=='none' || content.style.display=='') {content.style.display='block'; this.innerText='[접기]'} else {content.style.display='none'; this.innerText='[펼치기]'}">[펼치기]</span><button onclick="navigator.clipboard.writeText(document.getElementById('${firstToggleId}').outerHTML).then(() => {this.textContent='복사됨!'; setTimeout(() => this.textContent='Copy', 1000);}).catch(err => {})" style="margin-left: 8px; padding: 4px 8px; background: transparent; border: none; cursor: pointer; font-size: 12px; color: #646cff; font-weight: bold;" title="HTML 코드 복사">Copy</button>
+<div id="${firstStoryId}" style="display: none">
+${combinedContent}
+</div></div>`;
+
+      // 클립보드에 복사
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(combinedHtml);
+      } else {
+        // 폴백: 전통적인 방법 사용
+        const textArea = document.createElement('textarea');
+        textArea.value = combinedHtml;
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+          const successful = document.execCommand('copy');
+          if (!successful) {
+            throw new Error('document.execCommand 복사 실패');
+          }
+        } finally {
+          document.body.removeChild(textArea);
+        }
+      }
+
+      console.log('모든 펼치기 항목 통합 복사 완료:', {
+        itemCount: toggleContainers.length,
+        totalLength: combinedHtml.length,
+        preview: combinedHtml.substring(0, 300) + '...'
+      });
+
+      // 복사 완료 상태로 변경
+      setIsCopyAllTogglesCopied(true);
+      
+      // 2초 후 원래 상태로 복원
+      setTimeout(() => {
+        setIsCopyAllTogglesCopied(false);
+      }, 2000);
+
+    } catch (error) {
+      console.error('펼치기 항목 복사 실패:', error);
+      // 에러 발생 시에도 사용자에게 피드백 제공
+      setIsCopyAllTogglesCopied(true);
+      setTimeout(() => {
+        setIsCopyAllTogglesCopied(false);
+      }, 1000);
+    }
   };return (
     <main className="split-container">      
       <div className="function-bar">        
@@ -915,6 +1015,14 @@ function App() {  const [markdown, setMarkdown] = useState("");
           />
           Style2
         </label>
+        <label className="checkbox-label">
+          <input
+            type="checkbox"
+            checked={toggleFunction}
+            onChange={() => setToggleFunction(!toggleFunction)}
+          />
+          Toggle More
+        </label>
       </div>
 
       <div className="split-panes">
@@ -935,14 +1043,6 @@ function App() {  const [markdown, setMarkdown] = useState("");
           Custom-CSS
             </button>            {leftTab === "markdown" && (
           <div className="checkbox-container margin-left-auto">
-            <label className="checkbox-label">
-              <input
-                type="checkbox"
-                checked={toggleFunction}
-                onChange={() => setToggleFunction(!toggleFunction)}
-              />
-              Toggle More/Less
-            </label>
             <label className="checkbox-label">
               <input
                 type="checkbox"
@@ -1000,6 +1100,19 @@ function App() {  const [markdown, setMarkdown] = useState("");
               HTML Code
             </button>
             
+            {tab === "html_output" && (
+              <div className="checkbox-container">
+                <button 
+                  type="button" 
+                  className={`function-btn copy-all-toggles-btn ${isCopyAllTogglesCopied ? 'copied' : ''}`}
+                  onClick={handleCopyAllToggleItems}
+                  title="모든 펼치기 항목을 한꺼번에 복사"
+                >
+                  {isCopyAllTogglesCopied ? '복사완료' : 'Copy Toggles'}
+                </button>
+              </div>
+            )}
+            
             {tab === "html_code" && (
               <div className="checkbox-container">
                 <label className="checkbox-label">
@@ -1008,7 +1121,7 @@ function App() {  const [markdown, setMarkdown] = useState("");
                     checked={withoutStyle}
                     onChange={() => setWithoutStyle(!withoutStyle)}
                   />
-                  Without Style
+                  WithoutCSS
                 </label>
                 <label className="checkbox-label">
                   <input
